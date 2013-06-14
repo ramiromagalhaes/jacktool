@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QLabel" name="image">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>0</width>
+      <height>0</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuMain">
+    <property name="title">
+     <string>Arquivo</string>
+    </property>
+    <addaction name="actionDestinationFolder"/>
+    <addaction name="actionSourceFolder"/>
+   </widget>
+   <widget class="QMenu" name="menuPatches">
+    <property name="title">
+     <string>Retalhos</string>
+    </property>
+    <addaction name="actionTurn90"/>
+    <addaction name="actionTurn180"/>
+    <addaction name="actionTurn270"/>
+    <addaction name="separator"/>
+    <addaction name="actionPatchSize"/>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Ferramentas</string>
+    </property>
+    <addaction name="actionProcess"/>
+    <addaction name="actionMark"/>
+    <addaction name="actionUnmark"/>
+   </widget>
+   <addaction name="menuMain"/>
+   <addaction name="menuPatches"/>
+   <addaction name="menuTools"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="actionDestinationFolder">
+   <property name="text">
+    <string>Diretório de destino</string>
+   </property>
+  </action>
+  <action name="actionSourceFolder">
+   <property name="text">
+    <string>Diretório de fontes</string>
+   </property>
+  </action>
+  <action name="actionTurn90">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Girar 90º</string>
+   </property>
+  </action>
+  <action name="actionTurn180">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Girar 180º</string>
+   </property>
+  </action>
+  <action name="actionTurn270">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Girar 270º</string>
+   </property>
+  </action>
+  <action name="actionInverter">
+   <property name="text">
+    <string>Inverter ao longo do eixo vertical</string>
+   </property>
+  </action>
+  <action name="actionPatchSize">
+   <property name="text">
+    <string>Tamanho dos recortes</string>
+   </property>
+  </action>
+  <action name="actionBegin">
+   <property name="text">
+    <string>Começar</string>
+   </property>
+  </action>
+  <action name="actionProcess">
+   <property name="text">
+    <string>Processar esta imagem</string>
+   </property>
+  </action>
+  <action name="actionMark">
+   <property name="text">
+    <string>Marcar</string>
+   </property>
+  </action>
+  <action name="actionUnmark">
+   <property name="text">
+    <string>Desmarcar</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionDestinationFolder</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>changeDestinationFolder()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSourceFolder</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>changeSourceFolder()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPatchSize</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>changePatchSize()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionTurn90</sender>
+   <signal>changed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>toggleTurn90()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionTurn180</sender>
+   <signal>changed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>toggleTurn180()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionTurn270</sender>
+   <signal>changed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>toggleTurn270()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionProcess</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>process()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionMark</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setMarkerTool()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionUnmark</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setEraserTool()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>changeSourceFolder()</slot>
+  <slot>changeDestinationFolder()</slot>
+  <slot>toggleTurn90()</slot>
+  <slot>toggleTurn180()</slot>
+  <slot>toggleTurn270()</slot>
+  <slot>process()</slot>
+  <slot>changePatchSize()</slot>
+  <slot>setMarkerTool()</slot>
+  <slot>setEraserTool()</slot>
+ </slots>
+</ui>
