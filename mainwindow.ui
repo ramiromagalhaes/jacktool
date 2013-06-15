@@ -217,7 +217,7 @@
   </connection>
   <connection>
    <sender>actionSourceFolder</sender>
-   <signal>triggered(bool)</signal>
+   <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>changeSourceFolder()</slot>
    <hints>

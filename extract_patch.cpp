@@ -44,7 +44,7 @@ void extract_patches(const std::string &image_path, const std::vector<Rectangle>
 
             //copia o retalho e grava em arquivo
             std::stringstream ss;
-            ss << cfg.destinationFolder << "saida-" << patch_counter++ << ".bmp";
+            ss << cfg.destinationFolder << "\\" << "saida-" << patch_counter++ << ".bmp";
             std::string filename = ss.str();
 
             cv::Rect roi(w, h, cfg.patchWidth, cfg.patchHeight);

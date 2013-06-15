@@ -22,7 +22,6 @@ public:
 public slots:
     void changeSourceFolder();
     void changeDestinationFolder();
-    void changePatchSize();
     void toggleTurn90();
     void toggleTurn180();
     void toggleTurn270();

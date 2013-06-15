@@ -4,6 +4,7 @@
 #include "PatchExtractorConfiguration.h"
 #include "extract_patch.h"
 
+#include <sstream>
 #include <string>
 #include <QString>
 #include <QFileDialog>
@@ -32,15 +33,30 @@ void MainWindow::changeSourceFolder()
     this->sourceFolder = path.toAscii().constData();
 
     QStringList filter;
-    filter.append(".jpg");
-    filter.append(".png");
-    filter.append(".bpm");
+    filter.append("*.jpg");
+    filter.append("*.png");
+    filter.append("*.bmp");
+    filter.append("*.JPG");
+    filter.append("*.PNG");
+    filter.append("*.BMP");
     QDir directory(path);
-    QStringList images = directory.entryList(filter);
+    QStringList imageList = directory.entryList(filter);
 
-    for(QStringList::Iterator it = images.begin(); it != images.end(); ++it) {
+    {
+        std::stringstream message;
+        message << "Found " << imageList.size() << " images in folder " << this->sourceFolder;
+        ui->statusBar->showMessage(message.str().c_str());
+    }
+
+    for(QStringList::iterator it = imageList.begin(); it != imageList.end(); ++it) {
         QString s = *it;
         imagesInSourceFolder.push_back(s.toAscii().constData());
+    }
+
+    {
+        std::stringstream message;
+        message << "Prepared to work with " << imagesInSourceFolder.size() << " images.";
+        ui->statusBar->showMessage(message.str().c_str());
     }
 
     currentImage = 0;
@@ -55,12 +71,6 @@ void MainWindow::changeDestinationFolder()
                 tr("Choose destination folder"));
     cfg.destinationFolder = path.toAscii().constData();
 }
-
-void MainWindow::changePatchSize()
-{
-    //TODO
-}
-
 
 void MainWindow::toggleTurn90()
 {
@@ -79,8 +89,10 @@ void MainWindow::toggleTurn270()
 
 void MainWindow::process()
 {
+    const std::string s = sourceFolder + imagesInSourceFolder.at(currentImage);
+    extract_patches(s, exclusions, cfg);
+
     displayNextImage();
-    extract_patches("/home/ramiro/Imagens/adhikari-preotimizacao-2.png", exclusions, cfg);
 }
 
 void MainWindow::setMarkerTool()
@@ -119,8 +131,13 @@ void MainWindow::setPatchSize24x24()
 
 void MainWindow::displayNextImage()
 {
-    //cut the image and save the patches
-    QImage qimg = QImage(imagesInSourceFolder.at(currentImage++));
+    if (imagesInSourceFolder.empty()) {
+        //TODO alert user: choose a folder with images first
+        return;
+    }
+
+    const std::string s = sourceFolder + "/" + imagesInSourceFolder.at(currentImage++);
+    QImage qimg = QImage(s.c_str());
     ui->image->setPixmap(QPixmap::fromImage(qimg));
     ui->image->resize(ui->image->pixmap()->size());
 }
