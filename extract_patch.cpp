@@ -1,26 +1,29 @@
 #include "extract_patch.h"
 
-void extract_patches(const std::string &image_path, const std::vector<Exclusion> &exclusions, const PatchExtractorConfiguration &cfg)
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <sstream>
+
+void extract_patches(const std::string &image_path, const std::vector<Rectangle> &exclusions, const PatchExtractorConfiguration &cfg)
 {
-    //cfg.patchHeight
-    //cfg.patchWidth
+    cv::Mat image;
+    image = cv::imread(image_path);
 
-    const int image_width = 0;
-    const int image_heigth = 0;
+    int patch_counter = 0;
 
-    for (int h = 0; h < image_heigth; h += cfg.patchHeight)
+    for (int h = 0; h < image.size().height - cfg.patchHeight; h += cfg.patchHeight)
     {
-        for (int w = 0; w < image_width; w += cfg.patchWidth)
+        for (int w = 0; w < image.size().width - cfg.patchHeight; w += cfg.patchWidth)
         {
             const int h_big = h + cfg.patchHeight;
             const int w_big = w + cfg.patchWidth;
 
             bool intersects = false;
 
-            for (std::vector<Exclusion>::const_iterator it = exclusions.begin(); it != exclusions.end(); ++it)
+            for (std::vector<Rectangle>::const_iterator it = exclusions.begin(); it != exclusions.end(); ++it)
             {
                 //teste
-                const Exclusion e = *it;
+                const Rectangle e = *it;
                 const int x = e.x;
                 const int y = e.y;
                 const int x_big = e.x + e.width;
@@ -39,7 +42,14 @@ void extract_patches(const std::string &image_path, const std::vector<Exclusion>
                 continue;
             }
 
-            //copia a imagem e grava em arquivo
+            //copia o retalho e grava em arquivo
+            std::stringstream ss;
+            ss << cfg.destinationFolder << "saida-" << patch_counter++ << ".bmp";
+            std::string filename = ss.str();
+
+            cv::Rect roi(w, h, cfg.patchWidth, cfg.patchHeight);
+            cv::Mat patch(image, roi);
+            cv::imwrite(filename, patch);
         }
     }
 

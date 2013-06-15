@@ -1,8 +1,8 @@
 #ifndef EXCLUSION_H
 #define EXCLUSION_H
 
-typedef struct Exclusion_ {
+typedef struct Rectangle_ {
     int x, y, width, height;
-} Exclusion;
+} Rectangle;
 
 #endif // EXCLUSION_H

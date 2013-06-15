@@ -18,9 +18,9 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     PatchExtractorConfiguration.h \
-    Exclusion.h \
-    extract_patch.h
+    extract_patch.h \
+    Rectangle.h
 
 FORMS    += mainwindow.ui
 
-LIBS += -lopencv_core -lopencv_imgproc
+LIBS += -lopencv_core -lopencv_imgproc -lopencv_highgui

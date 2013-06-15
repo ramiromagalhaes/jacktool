@@ -54,11 +54,19 @@
     <property name="title">
      <string>Retalhos</string>
     </property>
+    <widget class="QMenu" name="menuTamanho_dos_recortes">
+     <property name="title">
+      <string>Tamanho</string>
+     </property>
+     <addaction name="action19x19"/>
+     <addaction name="action20x20"/>
+     <addaction name="action24x24"/>
+    </widget>
     <addaction name="actionTurn90"/>
     <addaction name="actionTurn180"/>
     <addaction name="actionTurn270"/>
     <addaction name="separator"/>
-    <addaction name="actionPatchSize"/>
+    <addaction name="menuTamanho_dos_recortes"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -140,11 +148,6 @@
     <string>Inverter ao longo do eixo vertical</string>
    </property>
   </action>
-  <action name="actionPatchSize">
-   <property name="text">
-    <string>Tamanho dos recortes</string>
-   </property>
-  </action>
   <action name="actionBegin">
    <property name="text">
     <string>Começar</string>
@@ -163,6 +166,33 @@
   <action name="actionUnmark">
    <property name="text">
     <string>Desmarcar</string>
+   </property>
+  </action>
+  <action name="action19x19">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>19x19 (Papageorgiou et al.; 1998)</string>
+   </property>
+  </action>
+  <action name="action20x20">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>20x20 (Pavani et al.; 2010)</string>
+   </property>
+  </action>
+  <action name="action24x24">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>24x24 (Viola, Jones; 2001, 2004)</string>
    </property>
   </action>
  </widget>
@@ -190,22 +220,6 @@
    <signal>triggered(bool)</signal>
    <receiver>MainWindow</receiver>
    <slot>changeSourceFolder()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionPatchSize</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>changePatchSize()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -313,6 +327,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>action19x19</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setPatchSize19x19()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action20x20</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setPatchSize20x20()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action24x24</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setPatchSize24x24()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>changeSourceFolder()</slot>
@@ -324,5 +386,8 @@
   <slot>changePatchSize()</slot>
   <slot>setMarkerTool()</slot>
   <slot>setEraserTool()</slot>
+  <slot>setPatchSize19x19()</slot>
+  <slot>setPatchSize20x20()</slot>
+  <slot>setPatchSize24x24()</slot>
  </slots>
 </ui>
