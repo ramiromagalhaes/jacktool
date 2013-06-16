@@ -120,10 +120,16 @@
    <property name="text">
     <string>Diretório de destino</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
   </action>
   <action name="actionSourceFolder">
    <property name="text">
     <string>Diretório de fontes</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
   <action name="actionTurn90">
