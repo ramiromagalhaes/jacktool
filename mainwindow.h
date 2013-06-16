@@ -1,9 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <string>
-#include <QMainWindow>
 #include <vector>
+
+#include <QMainWindow>
+#include <QStringList>
+#include <QDir>
+#include <QResizeEvent>
+
 #include "Rectangle.h"
 #include "PatchExtractorConfiguration.h"
 
@@ -34,12 +38,18 @@ public slots:
 
     void displayNextImage();
 
+protected:
+    virtual void resizeEvent(QResizeEvent *event);
+    virtual void paintEvent(QPaintEvent *event);
+
 private:
     Ui::MainWindow *ui;
 
-    std::string sourceFolder; //where images will be taken from
-    std::vector<std::string> imagesInSourceFolder; //images found in the source folder
-    int currentImage; //the current image in imagesInSourceFolder being worked on
+    QDir sourceFolder; //where images will be taken from
+    QStringList imagesInSourceFolder;//images found in the source folder
+    int currentImageIndex; //the current image in imagesInSourceFolder being worked on
+    QPixmap currentImage;//holds current image
+
 
     PatchExtractorConfiguration cfg; //Holds some configuration for the patch creator.
                                      //Includes the destination folder

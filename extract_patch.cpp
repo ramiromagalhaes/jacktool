@@ -4,7 +4,10 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <sstream>
 
-void extract_patches(const std::string &image_path, const std::vector<Rectangle> &exclusions, const PatchExtractorConfiguration &cfg)
+void extract_patches(const std::string &image_path,
+                     const std::string &output_name,
+                     const std::vector<Rectangle> &exclusions,
+                     const PatchExtractorConfiguration &cfg)
 {
     cv::Mat image;
     image = cv::imread(image_path);
@@ -44,7 +47,7 @@ void extract_patches(const std::string &image_path, const std::vector<Rectangle>
 
             //copia o retalho e grava em arquivo
             std::stringstream ss;
-            ss << cfg.destinationFolder << "\\" << "saida-" << patch_counter++ << ".bmp";
+            ss << cfg.destinationFolder << output_name << "-" << patch_counter++ << ".bmp";
             std::string filename = ss.str();
 
             cv::Rect roi(w, h, cfg.patchWidth, cfg.patchHeight);

@@ -1,17 +1,18 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "PatchExtractorConfiguration.h"
-#include "extract_patch.h"
-
-#include <sstream>
 #include <string>
+#include <sstream>
 #include <QString>
 #include <QFileDialog>
 #include <QImage>
 #include <QPixmap>
 #include <QStringList>
 #include <QDir>
+#include <QResizeEvent>
+
+#include "PatchExtractorConfiguration.h"
+#include "extract_patch.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,7 +31,7 @@ void MainWindow::changeSourceFolder()
     QString path = QFileDialog::getExistingDirectory(
                 this,
                 tr("Choose source folder"));
-    this->sourceFolder = path.toAscii().constData();
+    sourceFolder = QDir(path);
 
     QStringList filter;
     filter.append("*.jpg");
@@ -39,27 +40,20 @@ void MainWindow::changeSourceFolder()
     filter.append("*.JPG");
     filter.append("*.PNG");
     filter.append("*.BMP");
-    QDir directory(path);
-    QStringList imageList = directory.entryList(filter);
+
+    imagesInSourceFolder = sourceFolder.entryList(filter);
 
     {
-        std::stringstream message;
-        message << "Found " << imageList.size() << " images in folder " << this->sourceFolder;
-        ui->statusBar->showMessage(message.str().c_str());
+        QString message;
+        message.append("Found ");
+        message.append(QString::number(imagesInSourceFolder.size()));
+        message.append(" images in folder ");
+        message.append(sourceFolder.absolutePath());
+
+        ui->statusBar->showMessage(message);
     }
 
-    for(QStringList::iterator it = imageList.begin(); it != imageList.end(); ++it) {
-        QString s = *it;
-        imagesInSourceFolder.push_back(s.toAscii().constData());
-    }
-
-    {
-        std::stringstream message;
-        message << "Prepared to work with " << imagesInSourceFolder.size() << " images.";
-        ui->statusBar->showMessage(message.str().c_str());
-    }
-
-    currentImage = 0;
+    currentImageIndex = 0;
 
     displayNextImage();
 }
@@ -69,7 +63,17 @@ void MainWindow::changeDestinationFolder()
     QString path = QFileDialog::getExistingDirectory(
                 this,
                 tr("Choose destination folder"));
+    path.append("/");
+
     cfg.destinationFolder = path.toAscii().constData();
+
+    {
+        QString message;
+        message.append("Destination folder now is ");
+        message.append(path);
+
+        ui->statusBar->showMessage(message);
+    }
 }
 
 void MainWindow::toggleTurn90()
@@ -89,8 +93,11 @@ void MainWindow::toggleTurn270()
 
 void MainWindow::process()
 {
-    const std::string s = sourceFolder + imagesInSourceFolder.at(currentImage);
-    extract_patches(s, exclusions, cfg);
+    QString path = sourceFolder.absoluteFilePath(imagesInSourceFolder.at(currentImageIndex));
+    extract_patches(path.toAscii().constData(),
+                    imagesInSourceFolder.at(currentImageIndex).toAscii().constData(),
+                    exclusions,
+                    cfg);
 
     displayNextImage();
 }
@@ -136,8 +143,31 @@ void MainWindow::displayNextImage()
         return;
     }
 
-    const std::string s = sourceFolder + "/" + imagesInSourceFolder.at(currentImage++);
-    QImage qimg = QImage(s.c_str());
-    ui->image->setPixmap(QPixmap::fromImage(qimg));
-    ui->image->resize(ui->image->pixmap()->size());
+    //set the image to be shown
+    QString filepath = sourceFolder.absoluteFilePath(imagesInSourceFolder.at(currentImageIndex++));
+    QImage theImage = QImage(filepath.toAscii().constData());
+    currentImage = QPixmap::fromImage(theImage);
+
+    //show the image
+    ui->centralWidget->update();
+}
+
+void MainWindow::paintEvent(QPaintEvent *event)
+{
+    QMainWindow::paintEvent(event);
+
+    if (currentImage.isNull()) {
+        return;
+    }
+
+    ui->image->setPixmap(
+        currentImage.scaled(ui->image->size(), Qt::KeepAspectRatio, Qt::FastTransformation)
+    );
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+
+    ui->image->resize(centralWidget()->size());
 }
