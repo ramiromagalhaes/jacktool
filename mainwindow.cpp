@@ -10,6 +10,7 @@
 #include <QStringList>
 #include <QDir>
 #include <QResizeEvent>
+#include <QDesktopServices>
 
 #include "PatchExtractorConfiguration.h"
 #include "extract_patch.h"
@@ -18,6 +19,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    QString destFolder = QDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)).absolutePath();
+    destFolder += QDir::separator();
+
+    this->cfg.destinationFolder = destFolder.toAscii().data();
+
     ui->setupUi(this);
 }
 
@@ -62,7 +68,8 @@ void MainWindow::changeDestinationFolder()
 {
     QString path = QFileDialog::getExistingDirectory(
                 this,
-                tr("Choose destination folder"));
+                tr("Choose destination folder"),
+                cfg.destinationFolder.c_str());
     path.append("/");
 
     cfg.destinationFolder = path.toAscii().constData();
@@ -152,6 +159,7 @@ void MainWindow::displayNextImage()
     ui->centralWidget->update();
 }
 
+//display the properly rescaled image in the image label whenever necessary
 void MainWindow::paintEvent(QPaintEvent *event)
 {
     QMainWindow::paintEvent(event);
@@ -165,6 +173,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
     );
 }
 
+//changes the size of the label that holds the image when the window size changes
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);
