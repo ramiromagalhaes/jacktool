@@ -11,6 +11,7 @@
 #include <QDir>
 #include <QResizeEvent>
 #include <QDesktopServices>
+#include <QMessageBox>
 
 #include "PatchExtractorConfiguration.h"
 #include "extract_patch.h"
@@ -21,8 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     QString destFolder = QDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)).absolutePath();
     destFolder += QDir::separator();
-
     this->cfg.destinationFolder = destFolder.toAscii().data();
+
+    currentImageIndex = -1;
 
     ui->setupUi(this);
 }
@@ -100,6 +102,13 @@ void MainWindow::toggleTurn270()
 
 void MainWindow::process()
 {
+    if (currentImageIndex == -1 ||
+        imagesInSourceFolder.isEmpty() ||
+        currentImageIndex >= imagesInSourceFolder.size()) {
+        //TODO display error message.
+        return;
+    }
+
     QString path = sourceFolder.absoluteFilePath(imagesInSourceFolder.at(currentImageIndex));
     extract_patches(path.toAscii().constData(),
                     imagesInSourceFolder.at(currentImageIndex).toAscii().constData(),
@@ -145,8 +154,8 @@ void MainWindow::setPatchSize24x24()
 
 void MainWindow::displayNextImage()
 {
-    if (imagesInSourceFolder.empty()) {
-        //TODO alert user: choose a folder with images first
+    if (currentImageIndex == -1 || imagesInSourceFolder.empty() || currentImageIndex >= imagesInSourceFolder.size()) {
+        //TODO warn the user: no more images to display and process
         return;
     }
 

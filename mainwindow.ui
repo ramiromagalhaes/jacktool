@@ -173,15 +173,24 @@
    <property name="text">
     <string>Processar esta imagem</string>
    </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
   </action>
   <action name="actionMark">
    <property name="text">
     <string>Marcar</string>
    </property>
+   <property name="shortcut">
+    <string>A</string>
+   </property>
   </action>
   <action name="actionUnmark">
    <property name="text">
     <string>Desmarcar</string>
+   </property>
+   <property name="shortcut">
+    <string>D</string>
    </property>
   </action>
   <action name="action19x19">
