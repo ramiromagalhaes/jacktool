@@ -14,12 +14,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    extract_patch.cpp
+    extract_patch.cpp \
+    markertool.cpp
 
 HEADERS  += mainwindow.h \
     PatchExtractorConfiguration.h \
     extract_patch.h \
-    Rectangle.h
+    Rectangle.h \
+    markertool.h
 
 FORMS    += mainwindow.ui
 

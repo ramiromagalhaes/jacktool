@@ -120,12 +120,12 @@ void MainWindow::process()
 
 void MainWindow::setMarkerTool()
 {
-    this->marking = true;
+    //this->marking = true;
 }
 
 void MainWindow::setEraserTool()
 {
-    this->marking = false;
+    //this->marking = false;
 }
 
 void MainWindow::setPatchSize19x19()

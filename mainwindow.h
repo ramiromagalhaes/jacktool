@@ -55,9 +55,6 @@ private:
                                      //Includes the destination folder
 
     std::vector<Rectangle> exclusions; //all areas that should not be exported
-
-    //UI tools here
-    bool marking; //the marking tool is selected if == true
 };
 
 #endif // MAINWINDOW_H
