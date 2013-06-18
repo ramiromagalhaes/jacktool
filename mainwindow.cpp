@@ -118,6 +118,18 @@ void MainWindow::process()
     displayNextImage();
 }
 
+void MainWindow::ignore()
+{
+    if (currentImageIndex == -1 ||
+        imagesInSourceFolder.isEmpty() ||
+        currentImageIndex >= imagesInSourceFolder.size()) {
+        //TODO display error message.
+        return;
+    }
+
+    displayNextImage();
+}
+
 void MainWindow::setMarkerTool()
 {
     //this->marking = true;

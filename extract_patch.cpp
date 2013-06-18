@@ -2,6 +2,7 @@
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #include <sstream>
 
 void extract_patches(const std::string &image_path,
@@ -52,6 +53,7 @@ void extract_patches(const std::string &image_path,
 
             cv::Rect roi(w, h, cfg.patchWidth, cfg.patchHeight);
             cv::Mat patch(image, roi);
+            cv::cvtColor(patch, patch, CV_BGR2GRAY);
             cv::imwrite(filename, patch);
         }
     }

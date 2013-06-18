@@ -30,6 +30,7 @@ public slots:
     void toggleTurn180();
     void toggleTurn270();
     void process();
+    void ignore();
     void setMarkerTool();
     void setEraserTool();
     void setPatchSize19x19();

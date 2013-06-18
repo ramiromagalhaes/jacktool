@@ -15,13 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     extract_patch.cpp \
-    markertool.cpp
+    imagemarker.cpp
 
 HEADERS  += mainwindow.h \
     PatchExtractorConfiguration.h \
     extract_patch.h \
     Rectangle.h \
-    markertool.h
+    imagemarker.h
 
 FORMS    += mainwindow.ui
 

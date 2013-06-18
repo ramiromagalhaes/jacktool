@@ -20,7 +20,7 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <widget class="QLabel" name="image">
+   <widget class="ImageMarker" name="image">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -96,6 +96,7 @@
     <property name="title">
      <string>Ferramentas</string>
     </property>
+    <addaction name="actionIgnore"/>
     <addaction name="actionProcess"/>
     <addaction name="actionMark"/>
     <addaction name="actionUnmark"/>
@@ -226,8 +227,23 @@
     <string>24x24 (Viola, Jones; 2001, 2004)</string>
    </property>
   </action>
+  <action name="actionIgnore">
+   <property name="text">
+    <string>Ignorar essa imagem</string>
+   </property>
+   <property name="shortcut">
+    <string>F4</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ImageMarker</class>
+   <extends>QLabel</extends>
+   <header>imagemarker.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
@@ -406,6 +422,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionIgnore</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ignore()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>changeSourceFolder()</slot>
@@ -420,5 +452,6 @@
   <slot>setPatchSize19x19()</slot>
   <slot>setPatchSize20x20()</slot>
   <slot>setPatchSize24x24()</slot>
+  <slot>ignore()</slot>
  </slots>
 </ui>

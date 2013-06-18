@@ -1,9 +1,16 @@
 #ifndef IMAGEMARKER_H
 #define IMAGEMARKER_H
 
-#include <QWidget>
+#include "Rectangle.h"
+#include <vector>
+#include <QLabel>
+#include <QMouseEvent>
+#include <QResizeEvent>
 
-class ImageMarker : public QWidget
+
+
+//To use that in the Designer, see pages 117 and 118 of the book
+class ImageMarker : public QLabel
 {
     Q_OBJECT
     //Q_PROPERTY(QColor penColor READ penColor WRITE setPenColor)
@@ -11,10 +18,15 @@ class ImageMarker : public QWidget
 public:
     explicit ImageMarker(QWidget *parent = 0);
 
+    void useMarkTool();
+    void useUnmarkTool();
+    void handleClick(const int x, const int y);
+
 protected:
-    void mousePressEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
-    void paintEvent(QPaintEvent *);
+    void mousePressEvent(QMouseEvent *evt);
+    void mouseMoveEvent(QMouseEvent *evt);
+    void paintEvent(QPaintEvent *evt);
+    void resizeEvent(QResizeEvent *evt);
 
 signals:
     
