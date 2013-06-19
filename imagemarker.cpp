@@ -55,15 +55,13 @@ void ImageMarker::paintEvent(QPaintEvent *evt)
 {
     QLabel::paintEvent(evt);
 
-    /*
     QPainter painter(this);
-    for(std::vector<Rectangle>::iterator it = restrictions.begin(); it != restrictions.end();)
+    for(std::vector<Rectangle>::iterator it = restrictions.begin(); it != restrictions.end(); ++it)
     {
         Rectangle r = *it;
         painter.setPen(Qt::magenta);
         painter.drawRect(r.x, r.y, r.width, r.height);
     }
-    */
 }
 
 void ImageMarker::resizeEvent(QResizeEvent *evt)
