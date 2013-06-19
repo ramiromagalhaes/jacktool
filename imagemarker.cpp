@@ -7,12 +7,17 @@
 #include <QPainter>
 
 
+
 ImageMarker::ImageMarker(QWidget *parent) :
     QLabel(parent)
 {
     //TODO check page 109-110
 
     setAttribute(Qt::WA_StaticContents);
+
+    //the pen we'll use while writing the ruber bands and boxes
+    pen.setWidth(1);
+    pen.setColor(Qt::magenta);
 }
 
 void ImageMarker::mousePressEvent(QMouseEvent *evt)
@@ -29,11 +34,14 @@ void ImageMarker::mousePressEvent(QMouseEvent *evt)
     }
 }
 
-void ImageMarker::mouseMoveEvent(QMouseEvent *)
+void ImageMarker::mouseMoveEvent(QMouseEvent *evt)
 {
     if (!isReady()) { return; }
 
     if (marking) {
+        updateRubberBandRegion();
+        rubberband.setBottomLeft(evt->pos());
+        updateRubberBandRegion();
     }
 }
 
@@ -56,11 +64,11 @@ void ImageMarker::paintEvent(QPaintEvent *evt)
     QLabel::paintEvent(evt);
 
     QPainter painter(this);
+    painter.setPen(pen);
+
     for(std::vector<Rectangle>::iterator it = restrictions.begin(); it != restrictions.end(); ++it)
     {
-        Rectangle r = *it;
-        painter.setPen(Qt::magenta);
-        painter.drawRect(r.x, r.y, r.width, r.height);
+        painter.drawRect(it->x, it->y, it->width, it->height);
     }
 }
 
@@ -86,8 +94,8 @@ void ImageMarker::handleLeftClick(QMouseEvent *evt)
 {
     marking = true;
 
-    clickX = evt->x();
-    clickY = evt->y();
+    rubberband.setTopLeft(evt->pos());
+    rubberband.setBottomRight(evt->pos());
 }
 
 void ImageMarker::handleRightRelease(QMouseEvent *evt)
@@ -102,17 +110,26 @@ void ImageMarker::handleRightRelease(QMouseEvent *evt)
     }
 }
 
-void ImageMarker::handleLeftRelease(QMouseEvent *evt)
+void ImageMarker::handleLeftRelease(QMouseEvent *)
 {
     marking = false;
+    updateRubberBandRegion();
 
     Rectangle newRect;
-    newRect.x = clickX;
-    newRect.y = clickY;
-    newRect.height = evt->x() - clickX;
-    newRect.width  = evt->y() - clickY;
+    newRect.x = rubberband.left();
+    newRect.y = rubberband.top();
+    newRect.height = rubberband.height();
+    newRect.width  = rubberband.width();
 
     restrictions.push_back(newRect);
-    std::cout << "End rectangle: " << newRect.x << " " << newRect.y << " " << newRect.height << " " << newRect.width << std::endl;
+}
+
+void ImageMarker::updateRubberBandRegion()
+{
+    QRect rect = rubberband.normalized();
+    update(rect.left(),  rect.top(),    rect.width(), 1);
+    update(rect.left(),  rect.top(),    1,            rect.height());
+    update(rect.left(),  rect.bottom(), rect.width(), 1);
+    update(rect.right(), rect.top(),    1,            rect.height());
 }
 

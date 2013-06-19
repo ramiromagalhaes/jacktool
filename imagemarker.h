@@ -4,7 +4,8 @@
 #include "Rectangle.h"
 #include <vector>
 #include <QLabel>
-
+#include <QPen>
+#include <QRubberBand>
 
 
 class QMouseEvent;
@@ -35,16 +36,18 @@ private:
     void handleRightRelease(QMouseEvent *evt);
     void handleLeftRelease(QMouseEvent *evt);
 
-    void deleteRectangle(const int x, const int y);
+    void updateRubberBandRegion();
 
 
+    QPen pen;
 
     //exclusion markers added by the user
     std::vector<Rectangle> restrictions;
 
     //to be used when marking a certain region
     bool marking; //current state of the marking tool
-    int clickX, clickY; //origin of the clicked area
+
+    QRect rubberband;
 };
 
 #endif // IMAGEMARKER_H
