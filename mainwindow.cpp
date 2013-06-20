@@ -172,26 +172,12 @@ void MainWindow::displayNextImage()
     }
 
     //set the image to be shown
-    QString filepath = sourceFolder.absoluteFilePath(imagesInSourceFolder.at(currentImageIndex++));
-    QImage theImage = QImage(filepath.toAscii().constData());
-    currentImage = QPixmap::fromImage(theImage);
+    QString filepath = sourceFolder.absoluteFilePath(
+                imagesInSourceFolder.at(currentImageIndex++));
+    ui->image->setImageFromAbsolutePath(filepath);
 
     //show the image
     ui->centralWidget->update();
-}
-
-//display the properly rescaled image in the image label whenever necessary
-void MainWindow::paintEvent(QPaintEvent *event)
-{
-    QMainWindow::paintEvent(event);
-
-    if (currentImage.isNull()) {
-        return;
-    }
-
-    ui->image->setPixmap(
-        currentImage.scaled(ui->image->size(), Qt::KeepAspectRatio, Qt::FastTransformation)
-    );
 }
 
 //changes the size of the label that holds the image when the window size changes

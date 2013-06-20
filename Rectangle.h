@@ -10,6 +10,13 @@ public:
                 this->y <= y && y <= this->y + height;
     }
 
+    int bottom() {
+        return y + height;
+    }
+
+    int right() {
+        return x + width;
+    }
 };
 
 #endif // EXCLUSION_H

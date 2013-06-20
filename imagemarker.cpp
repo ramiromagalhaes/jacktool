@@ -23,15 +23,20 @@ ImageMarker::ImageMarker(QWidget *parent) :
     rubberbandPen.setColor(Qt::yellow);
 }
 
+void ImageMarker::setImageFromAbsolutePath(QString &path)
+{
+    imageFilePath = path;
+
+    QImage theImage = QImage(path);
+    currentImage = QPixmap::fromImage(theImage);
+    setPixmap(currentImage.scaled(size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+}
+
 void ImageMarker::mousePressEvent(QMouseEvent *evt)
 {
     if (!isReady()) { return; }
 
-    if(evt->button() == Qt::RightButton)
-    {
-        handleRightClick(evt);
-    }
-    else if (evt->button() == Qt::LeftButton)
+    if (evt->button() == Qt::LeftButton)
     {
         handleLeftClick(evt);
     }
@@ -82,7 +87,14 @@ void ImageMarker::paintEvent(QPaintEvent *evt)
 void ImageMarker::resizeEvent(QResizeEvent *evt)
 {
     QLabel::resizeEvent(evt);
-    //TODO
+    if (!currentImage.isNull())
+    {
+        setPixmap(currentImage.scaled(
+                  size(),
+                  Qt::KeepAspectRatio,
+                  Qt::FastTransformation));
+        updateBufferDisplayRatio();
+    }
 }
 
 bool ImageMarker::isReady()
@@ -91,11 +103,6 @@ bool ImageMarker::isReady()
     if (pixmap()->isNull()) return false;
 
     return true;
-}
-
-void ImageMarker::handleRightClick(QMouseEvent *)
-{
-    //does nothing
 }
 
 void ImageMarker::handleLeftClick(QMouseEvent *evt)
@@ -112,6 +119,7 @@ void ImageMarker::handleRightRelease(QMouseEvent *evt)
         Rectangle r = *it;
         if ( r.contains(evt->x(), evt->y()) ) {
             exclusions.erase(it);
+            updateExcludedRegion(r);
         } else {
             ++it;
         }
@@ -137,9 +145,23 @@ void ImageMarker::handleLeftRelease(QMouseEvent *)
 void ImageMarker::updateRubberBandRegion()
 {
     QRect rect = rubberband.normalized();
-    update(rect.left(),  rect.top(),    rect.width(), 1);
-    update(rect.left(),  rect.top(),    1,            rect.height());
-    update(rect.left(),  rect.bottom(), rect.width(), 1);
-    update(rect.right(), rect.top(),    1,            rect.height());
+    update(rect.left(),  rect.top() - 1,    rect.width(), 3);
+    update(rect.left(),  rect.top() - 1,    3,            rect.height());
+    update(rect.left(),  rect.bottom() - 1, rect.width(), 3);
+    update(rect.right(), rect.top(),     3,               rect.height() - 1);
+}
+
+void ImageMarker::updateBufferDisplayRatio()
+{
+    sizeRatio = (float)pixmap()->size().height() /
+            (float)currentImage.size().height();
+}
+
+void ImageMarker::updateExcludedRegion(Rectangle &rect)
+{
+    update(rect.x,  rect.y - 1,    rect.width,     3);
+    update(rect.x,  rect.y - 1,    3,              rect.height);
+    update(rect.x,  rect.bottom() - 1, rect.width, 3);
+    update(rect.right(), rect.y,     3,            rect.height - 1);
 }
 

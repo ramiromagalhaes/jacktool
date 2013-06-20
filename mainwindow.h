@@ -41,7 +41,6 @@ public slots:
 
 protected:
     virtual void resizeEvent(QResizeEvent *event);
-    virtual void paintEvent(QPaintEvent *event);
 
 private:
     Ui::MainWindow *ui;
@@ -49,7 +48,6 @@ private:
     QDir sourceFolder; //where images will be taken from
     QStringList imagesInSourceFolder;//images found in the source folder
     int currentImageIndex; //the current image in imagesInSourceFolder being worked on
-    QPixmap currentImage;//holds current image
 
 
     PatchExtractorConfiguration cfg; //Holds some configuration for the patch creator.

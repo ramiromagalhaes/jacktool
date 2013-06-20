@@ -6,6 +6,8 @@
 #include <QLabel>
 #include <QPen>
 #include <QRubberBand>
+#include <QString>
+#include <QPixmap>
 
 
 class QMouseEvent;
@@ -19,6 +21,7 @@ class ImageMarker : public QLabel
 
 public:
     explicit ImageMarker(QWidget *parent = 0);
+    void setImageFromAbsolutePath(QString &path);
 
 protected:
     void mousePressEvent(QMouseEvent *evt);
@@ -31,13 +34,14 @@ protected:
 private:
     bool isReady();
 
-    void handleRightClick(QMouseEvent *evt);
     void handleLeftClick(QMouseEvent *evt);
     void handleRightRelease(QMouseEvent *evt);
     void handleLeftRelease(QMouseEvent *evt);
 
     void updateRubberBandRegion();
+    void updateBufferDisplayRatio();
 
+    void updateExcludedRegion(Rectangle &r);
 
     QPen rubberbandPen;
     QPen exclusionsPen;
@@ -51,6 +55,9 @@ private:
     //when a user is marking a face it'll be equal to true
     bool marking;
 
+    QString imageFilePath;
+    QPixmap currentImage;
+    float sizeRatio; //relation between what the image is and what is displayed
 };
 
 #endif // IMAGEMARKER_H
