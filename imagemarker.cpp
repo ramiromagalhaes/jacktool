@@ -30,6 +30,9 @@ void ImageMarker::setImageFromAbsolutePath(QString &path)
     QImage theImage = QImage(path);
     currentImage = QPixmap::fromImage(theImage);
     setPixmap(currentImage.scaled(size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+    exclusions.clear();
+    updateBufferDisplayRatio();
 }
 
 void ImageMarker::mousePressEvent(QMouseEvent *evt)
@@ -80,7 +83,11 @@ void ImageMarker::paintEvent(QPaintEvent *evt)
     painter.setPen(exclusionsPen);
     for(std::vector<Rectangle>::iterator it = exclusions.begin(); it != exclusions.end(); ++it)
     {
-        painter.drawRect(it->x, it->y, it->width, it->height);
+        painter.drawRect(
+            it->x,
+            it->y,
+            it->width,
+            it->height);
     }
 }
 
@@ -153,8 +160,11 @@ void ImageMarker::updateRubberBandRegion()
 
 void ImageMarker::updateBufferDisplayRatio()
 {
-    sizeRatio = (float)pixmap()->size().height() /
-            (float)currentImage.size().height();
+    //TODO same aspect ratio!
+    heightRatio = ((float)pixmap()->size().height()) /
+            ((float)currentImage.size().height());
+    widthRatio = ((float)pixmap()->size().width()) /
+            ((float)currentImage.size().width());
 }
 
 void ImageMarker::updateExcludedRegion(Rectangle &rect)
@@ -162,6 +172,6 @@ void ImageMarker::updateExcludedRegion(Rectangle &rect)
     update(rect.x,  rect.y - 1,    rect.width,     3);
     update(rect.x,  rect.y - 1,    3,              rect.height);
     update(rect.x,  rect.bottom() - 1, rect.width, 3);
-    update(rect.right(), rect.y,     3,            rect.height - 1);
+    update(rect.right(), rect.y,   3,              rect.height - 1);
 }
 

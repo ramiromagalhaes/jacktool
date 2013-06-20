@@ -57,7 +57,8 @@ private:
 
     QString imageFilePath;
     QPixmap currentImage;
-    float sizeRatio; //relation between what the image is and what is displayed
+    float widthRatio; //relation between what the image is and what is displayed
+    float heightRatio; //relation between what the image is and what is displayed
 };
 
 #endif // IMAGEMARKER_H
