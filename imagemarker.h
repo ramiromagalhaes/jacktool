@@ -39,15 +39,18 @@ private:
     void updateRubberBandRegion();
 
 
-    QPen pen;
+    QPen rubberbandPen;
+    QPen exclusionsPen;
+
+    //will show up whenever the user is defining an exclusion area
+    QRect rubberband;
 
     //exclusion markers added by the user
-    std::vector<Rectangle> restrictions;
+    std::vector<Rectangle> exclusions;
 
-    //to be used when marking a certain region
-    bool marking; //current state of the marking tool
+    //when a user is marking a face it'll be equal to true
+    bool marking;
 
-    QRect rubberband;
 };
 
 #endif // IMAGEMARKER_H

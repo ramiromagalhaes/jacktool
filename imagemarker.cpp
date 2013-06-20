@@ -16,8 +16,11 @@ ImageMarker::ImageMarker(QWidget *parent) :
     setAttribute(Qt::WA_StaticContents);
 
     //the pen we'll use while writing the ruber bands and boxes
-    pen.setWidth(1);
-    pen.setColor(Qt::magenta);
+    exclusionsPen.setWidth(1);
+    exclusionsPen.setColor(Qt::magenta);
+
+    rubberbandPen.setWidth(1);
+    rubberbandPen.setColor(Qt::yellow);
 }
 
 void ImageMarker::mousePressEvent(QMouseEvent *evt)
@@ -64,9 +67,13 @@ void ImageMarker::paintEvent(QPaintEvent *evt)
     QLabel::paintEvent(evt);
 
     QPainter painter(this);
-    painter.setPen(pen);
+    if (marking) {
+        painter.setPen(rubberbandPen);
+        painter.drawRect(rubberband);
+    }
 
-    for(std::vector<Rectangle>::iterator it = restrictions.begin(); it != restrictions.end(); ++it)
+    painter.setPen(exclusionsPen);
+    for(std::vector<Rectangle>::iterator it = exclusions.begin(); it != exclusions.end(); ++it)
     {
         painter.drawRect(it->x, it->y, it->width, it->height);
     }
@@ -74,7 +81,8 @@ void ImageMarker::paintEvent(QPaintEvent *evt)
 
 void ImageMarker::resizeEvent(QResizeEvent *evt)
 {
-    QLabel::resizeEvent(evt);//TODO I'm just testing!
+    QLabel::resizeEvent(evt);
+    //TODO
 }
 
 bool ImageMarker::isReady()
@@ -100,10 +108,10 @@ void ImageMarker::handleLeftClick(QMouseEvent *evt)
 
 void ImageMarker::handleRightRelease(QMouseEvent *evt)
 {
-    for(std::vector<Rectangle>::iterator it = restrictions.begin(); it != restrictions.end();) {
+    for(std::vector<Rectangle>::iterator it = exclusions.begin(); it != exclusions.end();) {
         Rectangle r = *it;
         if ( r.contains(evt->x(), evt->y()) ) {
-            restrictions.erase(it);
+            exclusions.erase(it);
         } else {
             ++it;
         }
@@ -115,13 +123,15 @@ void ImageMarker::handleLeftRelease(QMouseEvent *)
     marking = false;
     updateRubberBandRegion();
 
+    rubberband = rubberband.normalized();
+
     Rectangle newRect;
     newRect.x = rubberband.left();
     newRect.y = rubberband.top();
     newRect.height = rubberband.height();
     newRect.width  = rubberband.width();
 
-    restrictions.push_back(newRect);
+    exclusions.push_back(newRect);
 }
 
 void ImageMarker::updateRubberBandRegion()
