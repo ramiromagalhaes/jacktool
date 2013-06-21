@@ -98,8 +98,6 @@
     </property>
     <addaction name="actionIgnore"/>
     <addaction name="actionProcess"/>
-    <addaction name="actionMark"/>
-    <addaction name="actionUnmark"/>
    </widget>
    <addaction name="menuMain"/>
    <addaction name="menuPatches"/>
@@ -331,38 +329,6 @@
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>process()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionMark</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>setMarkerTool()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionUnmark</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>setEraserTool()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
