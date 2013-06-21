@@ -5,14 +5,16 @@
 #include <vector>
 #include <QLabel>
 #include <QPen>
-#include <QRubberBand>
 #include <QString>
 #include <QPixmap>
+
 
 
 class QMouseEvent;
 class QPaintEvent;
 class QResizeEvent;
+
+
 
 //To use that in the Designer, see pages 117 and 118 of the book
 class ImageMarker : public QLabel
@@ -46,15 +48,11 @@ private:
 
     QPen rubberbandPen;
     QPen exclusionsPen;
+    QRect rubberband; //will show up whenever the user is defining an exclusion area
 
-    //will show up whenever the user is defining an exclusion area
-    QRect rubberband;
+    std::vector<Rectangle> exclusions; //exclusion markers added by the user
 
-    //exclusion markers added by the user
-    std::vector<Rectangle> exclusions;
-
-    //when a user is marking a face it'll be equal to true
-    bool marking;
+    bool marking; //when a user is marking a face it'll be equal to true
 
     QString imageFilePath;
     QPixmap currentImage;

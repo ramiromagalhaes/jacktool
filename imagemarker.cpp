@@ -1,6 +1,5 @@
 #include "imagemarker.h"
-#include <cmath>
-#include <iostream>
+//#include <iostream>
 
 #include <QMouseEvent>
 #include <QResizeEvent>
@@ -84,10 +83,10 @@ void ImageMarker::paintEvent(QPaintEvent *evt)
     for(std::vector<Rectangle>::iterator it = exclusions.begin(); it != exclusions.end(); ++it)
     {
         painter.drawRect(
-            it->x,
-            it->y,
-            it->width,
-            it->height);
+            (int)(((float)it->x)      / widthRatio),
+            (int)(((float)it->y)      / heightRatio),
+            (int)(((float)it->width)  / widthRatio),
+            (int)(((float)it->height) / heightRatio) );
     }
 }
 
@@ -118,13 +117,16 @@ void ImageMarker::handleLeftClick(QMouseEvent *evt)
 
     rubberband.setTopLeft(evt->pos());
     rubberband.setBottomRight(evt->pos());
+    updateRubberBandRegion();
 }
 
 void ImageMarker::handleRightRelease(QMouseEvent *evt)
 {
+    const int x = evt->x() * widthRatio;
+    const int y = evt->y() * heightRatio;
     for(std::vector<Rectangle>::iterator it = exclusions.begin(); it != exclusions.end();) {
         Rectangle r = *it;
-        if ( r.contains(evt->x(), evt->y()) ) {
+        if ( r.contains(x, y) ) {
             exclusions.erase(it);
             updateExcludedRegion(r);
         } else {
@@ -136,17 +138,16 @@ void ImageMarker::handleRightRelease(QMouseEvent *evt)
 void ImageMarker::handleLeftRelease(QMouseEvent *)
 {
     marking = false;
-    updateRubberBandRegion();
 
     rubberband = rubberband.normalized();
-
     Rectangle newRect;
-    newRect.x = rubberband.left();
-    newRect.y = rubberband.top();
-    newRect.height = rubberband.height();
-    newRect.width  = rubberband.width();
-
+    newRect.x      = rubberband.left()   * widthRatio;
+    newRect.y      = rubberband.top()    * heightRatio;
+    newRect.height = rubberband.height() * widthRatio;
+    newRect.width  = rubberband.width()  * heightRatio;
     exclusions.push_back(newRect);
+
+    update();
 }
 
 void ImageMarker::updateRubberBandRegion()
@@ -160,17 +161,15 @@ void ImageMarker::updateRubberBandRegion()
 
 void ImageMarker::updateExcludedRegion(Rectangle &rect)
 {
-    update(rect.x,  rect.y - 1,    rect.width,     3);
-    update(rect.x,  rect.y - 1,    3,              rect.height);
+    update(rect.x,  rect.y - 1,        rect.width,     3);
+    update(rect.x,  rect.y - 1,        3,              rect.height);
     update(rect.x,  rect.bottom() - 1, rect.width, 3);
-    update(rect.right(), rect.y,   3,              rect.height - 1);
+    update(rect.right(), rect.y,       3,              rect.height - 1);
 }
 
 void ImageMarker::updateBufferDisplayRatio()
 {
     //TODO same aspect ratio!
-    heightRatio = ((float)pixmap()->size().height()) /
-            ((float)currentImage.size().height());
-    widthRatio = ((float)pixmap()->size().width()) /
-            ((float)currentImage.size().width());
+    heightRatio = ((float)currentImage.size().height()) / ((float)pixmap()->size().height());
+    widthRatio  = ((float)currentImage.size().width())  / ((float)pixmap()->size().width());
 }
