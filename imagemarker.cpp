@@ -128,11 +128,12 @@ void ImageMarker::handleRightRelease(QMouseEvent *evt)
         Rectangle r = *it;
         if ( r.contains(x, y) ) {
             exclusions.erase(it);
-            updateExcludedRegion(r);
         } else {
             ++it;
         }
     }
+
+    update();
 }
 
 void ImageMarker::handleLeftRelease(QMouseEvent *)
