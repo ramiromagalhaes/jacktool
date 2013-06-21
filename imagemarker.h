@@ -39,9 +39,10 @@ private:
     void handleLeftRelease(QMouseEvent *evt);
 
     void updateRubberBandRegion();
-    void updateBufferDisplayRatio();
 
     void updateExcludedRegion(Rectangle &r);
+
+    void updateBufferDisplayRatio();
 
     QPen rubberbandPen;
     QPen exclusionsPen;

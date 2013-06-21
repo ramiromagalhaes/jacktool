@@ -158,15 +158,6 @@ void ImageMarker::updateRubberBandRegion()
     update(rect.right(), rect.top(),     3,               rect.height() - 1);
 }
 
-void ImageMarker::updateBufferDisplayRatio()
-{
-    //TODO same aspect ratio!
-    heightRatio = ((float)pixmap()->size().height()) /
-            ((float)currentImage.size().height());
-    widthRatio = ((float)pixmap()->size().width()) /
-            ((float)currentImage.size().width());
-}
-
 void ImageMarker::updateExcludedRegion(Rectangle &rect)
 {
     update(rect.x,  rect.y - 1,    rect.width,     3);
@@ -175,3 +166,11 @@ void ImageMarker::updateExcludedRegion(Rectangle &rect)
     update(rect.right(), rect.y,   3,              rect.height - 1);
 }
 
+void ImageMarker::updateBufferDisplayRatio()
+{
+    //TODO same aspect ratio!
+    heightRatio = ((float)pixmap()->size().height()) /
+            ((float)currentImage.size().height());
+    widthRatio = ((float)pixmap()->size().width()) /
+            ((float)currentImage.size().width());
+}
