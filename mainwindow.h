@@ -45,6 +45,8 @@ protected:
 
 private:
     bool reinforceCurrentImageIndexBoundaries();
+    void storeMarkings();
+    void displayCurrentImage();
 
     Ui::MainWindow *ui;
 
@@ -54,6 +56,8 @@ private:
 
     PatchExtractorConfiguration cfg; //Holds some configuration for the patch creator.
                                      //Includes the destination folder
+
+    Markings markings;
 };
 
 #endif // MAINWINDOW_H

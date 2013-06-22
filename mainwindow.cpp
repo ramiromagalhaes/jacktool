@@ -61,9 +61,10 @@ void MainWindow::changeSourceFolder()
         ui->statusBar->showMessage(message);
     }
 
-    currentImageIndex = -1;
+    markings.changeBaseDirectory(sourceFolder.absolutePath().toAscii().constData());
 
-    nextImage();
+    currentImageIndex = 0;
+    displayCurrentImage();
 }
 
 void MainWindow::changeDestinationFolder()
@@ -102,20 +103,20 @@ void MainWindow::toggleTurn270()
 
 void MainWindow::process()
 {
-    /*
+/*
     QString path = sourceFolder.absoluteFilePath(imagesInSourceFolder.at(currentImageIndex));
     extract_patches(path.toAscii().constData(),
                     imagesInSourceFolder.at(currentImageIndex).toAscii().constData(),
                     exclusions,
                     cfg);
-
-    nextImage();
-    */
+*/
 }
 
 void MainWindow::save()
 {
-    //save
+    markings.save();
+
+    ui->statusBar->showMessage("Saved.");
 }
 
 void MainWindow::setPatchSize19x19()
@@ -144,41 +145,31 @@ void MainWindow::setPatchSize24x24()
 
 void MainWindow::previousImage()
 {
+    storeMarkings();
+
     currentImageIndex--;
     if (reinforceCurrentImageIndexBoundaries()) {
         return;
     }
 
-    //set the image to be shown
-    QString filepath = sourceFolder.absoluteFilePath(
-                imagesInSourceFolder.at(currentImageIndex));
-    ui->image->setImageFromAbsolutePath(filepath);
-
-    //show the image
-    ui->centralWidget->update();
+    displayCurrentImage();
 }
 
 void MainWindow::nextImage()
 {
+    storeMarkings();
+
     currentImageIndex++;
     if (reinforceCurrentImageIndexBoundaries()) {
         return;
     }
 
-    //set the image to be shown
-    QString filepath = sourceFolder.absoluteFilePath(
-                imagesInSourceFolder.at(currentImageIndex));
-    ui->image->setImageFromAbsolutePath(filepath);
-
-    //show the image
-    ui->centralWidget->update();
+    displayCurrentImage();
 }
 
-//changes the size of the label that holds the image when the window size changes
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);
-
     ui->image->resize(centralWidget()->size());
 }
 
@@ -202,4 +193,30 @@ bool MainWindow::reinforceCurrentImageIndexBoundaries()
     }
 
     return false;
+}
+
+void MainWindow::storeMarkings()
+{
+    if (imagesInSourceFolder.empty())
+    {
+        return;
+    }
+
+    markings.set(
+                imagesInSourceFolder.at(currentImageIndex).toAscii().constData(),
+                ui->image->getExclusions());
+}
+
+void MainWindow::displayCurrentImage()
+{
+    //set the image to be shown
+    QString filepath = sourceFolder.absoluteFilePath(
+                imagesInSourceFolder.at(currentImageIndex));
+    ui->image->setImageFromAbsolutePath(filepath);
+
+    const std::vector<Rectangle> * m = markings.get( imagesInSourceFolder.at(currentImageIndex).toAscii().constData() );
+    ui->image->setExclusions(*m);
+
+    //show the image
+    ui->centralWidget->update();
 }

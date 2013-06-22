@@ -23,7 +23,10 @@ class ImageMarker : public QLabel
 
 public:
     explicit ImageMarker(QWidget *parent = 0);
+
     void setImageFromAbsolutePath(QString &path);
+    std::vector<Rectangle> * getExclusions();
+    void setExclusions(const std::vector<Rectangle> &exclusions_);
 
 protected:
     void mousePressEvent(QMouseEvent *evt);

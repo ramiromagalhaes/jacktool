@@ -127,7 +127,7 @@
   </action>
   <action name="actionSourceFolder">
    <property name="text">
-    <string>Definir diretório-fonte de imagens</string>
+    <string>Definir o diretório de origem de imagens</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>

@@ -5,6 +5,7 @@
 
 Markings::Markings()
 {
+    empty = new std::vector<Rectangle>();
 }
 
 Markings::Markings(const std::string base_directory_)
@@ -17,18 +18,13 @@ void Markings::changeBaseDirectory(const std::string base_directory_)
     base_directory = base_directory_;
     is_dirty = false;
 
-    for(std::map<std::string, std::vector<Rectangle>*>::iterator it; it != exclusions.end(); ) {
+    for(std::map<std::string, std::vector<Rectangle>*>::iterator it = exclusions.begin(); it != exclusions.end(); ) {
         std::map<std::string, std::vector<Rectangle> *>::value_type v = *it;
         delete v.second;
-
-        exclusions.erase(it);
     }
 
-
-    if ( !load() )
-    {
-        create();
-    }
+    exclusions.clear();
+    load();
 }
 
 void Markings::set(const std::string image, std::vector<Rectangle> *markings)
@@ -47,7 +43,19 @@ void Markings::set(const std::string image, std::vector<Rectangle> *markings)
     is_dirty = true;
 }
 
-void Markings::remove(const std::string image)
+const std::vector<Rectangle> * Markings::get(const std::string &image)
+{
+    std::map<std::string, std::vector<Rectangle> *>::iterator it = exclusions.find(image);
+    if ( it != exclusions.end() )
+    {
+        std::map<std::string, std::vector<Rectangle> *>::value_type v = *it;
+        return v.second;
+    }
+
+    return empty;
+}
+
+void Markings::remove(const std::string & image)
 {
     std::map<std::string, std::vector<Rectangle> *>::iterator it = exclusions.find(image);
     if ( it != exclusions.end() )
@@ -62,6 +70,11 @@ void Markings::save()
 {
     boost::filesystem::path archive( base_directory );
     archive = archive / ".jacktool.data";
+
+    if ( !boost::filesystem::exists(archive) )
+    {
+        create();
+    }
 
     boost::filesystem::ofstream ofs( archive );
     boost::archive::text_oarchive oa(ofs);

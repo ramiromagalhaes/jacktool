@@ -34,6 +34,21 @@ void ImageMarker::setImageFromAbsolutePath(QString &path)
     updateBufferDisplayRatio();
 }
 
+std::vector<Rectangle> * ImageMarker::getExclusions()
+{
+    std::vector<Rectangle> * returnMe = new std::vector<Rectangle>(exclusions);
+    return returnMe;
+}
+
+void ImageMarker::setExclusions(const std::vector<Rectangle> &exclusions_)
+{
+    exclusions.clear();
+    for (std::vector<Rectangle>::const_iterator it = exclusions_.begin(); it != exclusions_.end(); ++it)
+    {
+        exclusions.push_back(*it);
+    }
+}
+
 void ImageMarker::mousePressEvent(QMouseEvent *evt)
 {
     if (!isReady()) { return; }
