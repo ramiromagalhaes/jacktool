@@ -61,9 +61,9 @@ void MainWindow::changeSourceFolder()
         ui->statusBar->showMessage(message);
     }
 
-    currentImageIndex = 0;
+    currentImageIndex = -1;
 
-    displayNextImage();
+    nextImage();
 }
 
 void MainWindow::changeDestinationFolder()
@@ -102,42 +102,20 @@ void MainWindow::toggleTurn270()
 
 void MainWindow::process()
 {
-    if (currentImageIndex == -1 ||
-        imagesInSourceFolder.isEmpty() ||
-        currentImageIndex >= imagesInSourceFolder.size()) {
-        //TODO display error message.
-        return;
-    }
-
+    /*
     QString path = sourceFolder.absoluteFilePath(imagesInSourceFolder.at(currentImageIndex));
     extract_patches(path.toAscii().constData(),
                     imagesInSourceFolder.at(currentImageIndex).toAscii().constData(),
                     exclusions,
                     cfg);
 
-    displayNextImage();
+    nextImage();
+    */
 }
 
-void MainWindow::ignore()
+void MainWindow::save()
 {
-    if (currentImageIndex == -1 ||
-        imagesInSourceFolder.isEmpty() ||
-        currentImageIndex >= imagesInSourceFolder.size()) {
-        //TODO display error message.
-        return;
-    }
-
-    displayNextImage();
-}
-
-void MainWindow::setMarkerTool()
-{
-    //this->marking = true;
-}
-
-void MainWindow::setEraserTool()
-{
-    //this->marking = false;
+    //save
 }
 
 void MainWindow::setPatchSize19x19()
@@ -164,16 +142,32 @@ void MainWindow::setPatchSize24x24()
     this->ui->action20x20->setChecked(false);
 }
 
-void MainWindow::displayNextImage()
+void MainWindow::previousImage()
 {
-    if (currentImageIndex == -1 || imagesInSourceFolder.empty() || currentImageIndex >= imagesInSourceFolder.size()) {
-        //TODO warn the user: no more images to display and process
+    currentImageIndex--;
+    if (reinforceCurrentImageIndexBoundaries()) {
         return;
     }
 
     //set the image to be shown
     QString filepath = sourceFolder.absoluteFilePath(
-                imagesInSourceFolder.at(currentImageIndex++));
+                imagesInSourceFolder.at(currentImageIndex));
+    ui->image->setImageFromAbsolutePath(filepath);
+
+    //show the image
+    ui->centralWidget->update();
+}
+
+void MainWindow::nextImage()
+{
+    currentImageIndex++;
+    if (reinforceCurrentImageIndexBoundaries()) {
+        return;
+    }
+
+    //set the image to be shown
+    QString filepath = sourceFolder.absoluteFilePath(
+                imagesInSourceFolder.at(currentImageIndex));
     ui->image->setImageFromAbsolutePath(filepath);
 
     //show the image
@@ -186,4 +180,26 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     QMainWindow::resizeEvent(event);
 
     ui->image->resize(centralWidget()->size());
+}
+
+bool MainWindow::reinforceCurrentImageIndexBoundaries()
+{
+    if (imagesInSourceFolder.empty())
+    {
+        currentImageIndex = -1;
+        return true;
+    }
+
+    if (currentImageIndex < 0) {
+        currentImageIndex = 0;
+        return false;
+    }
+
+    if (currentImageIndex >= imagesInSourceFolder.size())
+    {
+        currentImageIndex = imagesInSourceFolder.size() - 1;
+        return false;
+    }
+
+    return false;
 }

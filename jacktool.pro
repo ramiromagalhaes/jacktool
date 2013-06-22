@@ -15,14 +15,16 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     extract_patch.cpp \
-    imagemarker.cpp
+    imagemarker.cpp \
+    markings.cpp
 
 HEADERS  += mainwindow.h \
     PatchExtractorConfiguration.h \
     extract_patch.h \
     Rectangle.h \
-    imagemarker.h
+    imagemarker.h \
+    markings.h
 
 FORMS    += mainwindow.ui
 
-LIBS += -lopencv_core -lopencv_imgproc -lopencv_highgui
+LIBS += -lopencv_core -lopencv_imgproc -lopencv_highgui -lboost_serialization -lboost_filesystem -lboost_system

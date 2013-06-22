@@ -71,8 +71,10 @@
     <property name="title">
      <string>Arquivo</string>
     </property>
-    <addaction name="actionDestinationFolder"/>
+    <addaction name="actionSave"/>
     <addaction name="actionSourceFolder"/>
+    <addaction name="actionDestinationFolder"/>
+    <addaction name="actionProcess"/>
    </widget>
    <widget class="QMenu" name="menuPatches">
     <property name="title">
@@ -94,10 +96,10 @@
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
-     <string>Ferramentas</string>
+     <string>Imagens</string>
     </property>
-    <addaction name="actionIgnore"/>
-    <addaction name="actionProcess"/>
+    <addaction name="actionPrevious"/>
+    <addaction name="actionNext"/>
    </widget>
    <addaction name="menuMain"/>
    <addaction name="menuPatches"/>
@@ -117,7 +119,7 @@
   </widget>
   <action name="actionDestinationFolder">
    <property name="text">
-    <string>Diretório de destino</string>
+    <string>Definir diretório de destino de retalhos</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
@@ -125,10 +127,10 @@
   </action>
   <action name="actionSourceFolder">
    <property name="text">
-    <string>Diretório de fontes</string>
+    <string>Definir diretório-fonte de imagens</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+F</string>
+    <string>Ctrl+A</string>
    </property>
   </action>
   <action name="actionTurn90">
@@ -176,10 +178,10 @@
   </action>
   <action name="actionProcess">
    <property name="text">
-    <string>Processar esta imagem</string>
+    <string>Processar</string>
    </property>
    <property name="shortcut">
-    <string>F5</string>
+    <string>Ctrl+Shift+P</string>
    </property>
   </action>
   <action name="actionMark">
@@ -225,9 +227,25 @@
     <string>24x24 (Viola, Jones; 2001, 2004)</string>
    </property>
   </action>
-  <action name="actionIgnore">
+  <action name="actionNext">
    <property name="text">
-    <string>Ignorar essa imagem</string>
+    <string>Próxima imagem</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Salvar</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionPrevious">
+   <property name="text">
+    <string>Imagem anterior</string>
    </property>
    <property name="shortcut">
     <string>F4</string>
@@ -389,10 +407,42 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionIgnore</sender>
+   <sender>actionNext</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>ignore()</slot>
+   <slot>nextImage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPrevious</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>previousImage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSave</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>save()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -418,6 +468,8 @@
   <slot>setPatchSize19x19()</slot>
   <slot>setPatchSize20x20()</slot>
   <slot>setPatchSize24x24()</slot>
-  <slot>ignore()</slot>
+  <slot>nextImage()</slot>
+  <slot>previousImage()</slot>
+  <slot>save()</slot>
  </slots>
 </ui>

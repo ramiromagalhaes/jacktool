@@ -10,6 +10,7 @@
 
 #include "Rectangle.h"
 #include "PatchExtractorConfiguration.h"
+#include "markings.h"
 
 namespace Ui {
 class MainWindow;
@@ -26,34 +27,33 @@ public:
 public slots:
     void changeSourceFolder();
     void changeDestinationFolder();
-    void toggleTurn90();
-    void toggleTurn180();
-    void toggleTurn270();
     void process();
-    void ignore();
-    void setMarkerTool();
-    void setEraserTool();
+    void save();
+
     void setPatchSize19x19();
     void setPatchSize20x20();
     void setPatchSize24x24();
+    void toggleTurn90();
+    void toggleTurn180();
+    void toggleTurn270();
 
-    void displayNextImage();
+    void previousImage();
+    void nextImage();
 
 protected:
     virtual void resizeEvent(QResizeEvent *event);
 
 private:
+    bool reinforceCurrentImageIndexBoundaries();
+
     Ui::MainWindow *ui;
 
     QDir sourceFolder; //where images will be taken from
     QStringList imagesInSourceFolder;//images found in the source folder
     int currentImageIndex; //the current image in imagesInSourceFolder being worked on
 
-
     PatchExtractorConfiguration cfg; //Holds some configuration for the patch creator.
                                      //Includes the destination folder
-
-    std::vector<Rectangle> exclusions; //all areas that should not be exported
 };
 
 #endif // MAINWINDOW_H
