@@ -63,7 +63,10 @@ void MainWindow::changeSourceFolder()
 
     markings.changeBaseDirectory(sourceFolder.absolutePath().toAscii().constData());
 
-    currentImageIndex = 0;
+    if ( reinforceCurrentImageIndexBoundaries() ) {
+        return;
+    }
+
     displayCurrentImage();
 }
 
@@ -103,13 +106,8 @@ void MainWindow::toggleTurn270()
 
 void MainWindow::process()
 {
-/*
-    QString path = sourceFolder.absoluteFilePath(imagesInSourceFolder.at(currentImageIndex));
-    extract_patches(path.toAscii().constData(),
-                    imagesInSourceFolder.at(currentImageIndex).toAscii().constData(),
-                    exclusions,
-                    cfg);
-*/
+    //TODO display a wait screen
+    markings.processAll(cfg);
 }
 
 void MainWindow::save()

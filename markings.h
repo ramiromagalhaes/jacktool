@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include "Rectangle.h"
+#include "PatchExtractorConfiguration.h"
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -22,6 +23,7 @@ public:
     const std::vector<Rectangle> * get(const std::string & image);
     void remove(const std::string & image);
     void save();
+    void processAll(const PatchExtractorConfiguration & cfg);
 
     bool isDirty();
 

@@ -3,6 +3,8 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem.hpp>
 
+#include "extract_patch.h"
+
 Markings::Markings()
 {
     empty = new std::vector<Rectangle>();
@@ -48,7 +50,7 @@ const std::vector<Rectangle> * Markings::get(const std::string &image)
     std::map<std::string, std::vector<Rectangle> *>::iterator it = exclusions.find(image);
     if ( it != exclusions.end() )
     {
-        std::map<std::string, std::vector<Rectangle> *>::value_type v = *it;
+        const std::map<std::string, std::vector<Rectangle> *>::value_type v = *it;
         return v.second;
     }
 
@@ -82,6 +84,23 @@ void Markings::save()
     ofs.close();
 
     is_dirty = false;
+}
+
+void Markings::processAll(const PatchExtractorConfiguration &cfg)
+{
+    boost::filesystem::path archive( base_directory );
+
+    for(std::map<std::string, std::vector<Rectangle>*>::iterator it = exclusions.begin(); it != exclusions.end(); ++it) {
+        const std::map<std::string, std::vector<Rectangle> *>::value_type v = *it;
+
+        const boost::filesystem::path file = archive / v.first;
+
+        //I should probably improve this interface...
+        extract_patches(file.native(),
+                        v.first,
+                        *v.second,
+                        cfg);
+    }
 }
 
 bool Markings::isDirty()
