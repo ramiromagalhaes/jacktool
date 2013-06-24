@@ -48,13 +48,38 @@ void extract_patches(const std::string &image_path,
 
             //copia o retalho e grava em arquivo
             std::stringstream ss;
-            ss << cfg.destinationFolder << output_name << "-" << patch_counter++ << ".bmp";
-            std::string filename = ss.str();
+            ss << cfg.destinationFolder << output_name << "-" << patch_counter++;
+            std::string filename = ss.str() + ".bmp";
 
             cv::Rect roi(w, h, cfg.patchWidth, cfg.patchHeight);
             cv::Mat patch(image, roi);
             cv::cvtColor(patch, patch, CV_BGR2GRAY);
             cv::imwrite(filename, patch);
+
+            if (cfg.rotate90)
+            {
+                filename = ss.str() + "-90.bmp";
+                cv::Mat transp = patch.clone();
+                cv::transpose(patch, transp);
+                cv::imwrite(filename, transp);
+            }
+            if (cfg.rotate180)
+            {
+                filename = ss.str() + "-180.bmp";
+                cv::Mat transp = patch.clone();
+                cv::transpose(patch, transp);
+                cv::transpose(transp, transp);
+                cv::imwrite(filename, transp);
+            }
+            if (cfg.rotate270)
+            {
+                filename = ss.str() + "-270.bmp";
+                cv::Mat transp = patch.clone();
+                cv::transpose(patch, transp);
+                cv::transpose(transp, transp);
+                cv::transpose(transp, transp);
+                cv::imwrite(filename, transp);
+            }
         }
     }
 

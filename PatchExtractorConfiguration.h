@@ -10,7 +10,7 @@ public:
     std::string destinationFolder;
 
     PatchExtractorConfiguration() {
-        rotate90 = rotate180 = rotate270 = false;
+        rotate90 = rotate180 = rotate270 = true;
         patchHeight = patchWidth = 24; //Viola, Jones; 2004 defaults.
                                        //Pavani et al; 2010 = 20 x 20
     }
