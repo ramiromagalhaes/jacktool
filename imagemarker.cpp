@@ -1,5 +1,5 @@
 #include "imagemarker.h"
-//#include <iostream>
+#include <iostream>
 
 #include <QMouseEvent>
 #include <QResizeEvent>
@@ -65,7 +65,7 @@ void ImageMarker::mouseMoveEvent(QMouseEvent *evt)
 
     if (marking) {
         updateRubberBandRegion();
-        rubberband.setBottomLeft(evt->pos());
+        rubberband.setBottomRight(evt->pos());
         updateRubberBandRegion();
     }
 }
@@ -172,7 +172,7 @@ void ImageMarker::updateRubberBandRegion()
     update(rect.left(),  rect.top() - 1,    rect.width(), 3);
     update(rect.left(),  rect.top() - 1,    3,            rect.height());
     update(rect.left(),  rect.bottom() - 1, rect.width(), 3);
-    update(rect.right(), rect.top(),     3,               rect.height() - 1);
+    update(rect.right(), rect.top(),        3,            rect.height() - 1);
 }
 
 void ImageMarker::updateExcludedRegion(Rectangle &rect)
