@@ -27,4 +27,25 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
-LIBS += -lopencv_core -lopencv_imgproc -lopencv_highgui -lboost_serialization -lboost_filesystem -lboost_system
+unix {
+    LIBS += -lopencv_core \
+            -lopencv_imgproc \
+            -lopencv_highgui \
+            -lboost_serialization \
+            -lboost_filesystem \
+            -lboost_system
+}
+
+win32 {
+    INCLUDEPATH += C:/boost/include/boost-1_54
+    LIBS += -LC:/boost/lib" \
+            -lboost_serialization-mgw46-mt-d-1_54 \
+            -lboost_filesystem-mgw46-mt-d-1_54 \
+            -lboost_system-mgw46-mt-d-1_54
+
+    INCLUDEPATH += C:/opencv_src/build/include
+    LIBS += -LC:/opencv/lib \
+            -lopencv_core \
+            -lopencv_imgproc \
+            -lopencv_highgui
+}
