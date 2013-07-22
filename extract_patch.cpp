@@ -26,7 +26,6 @@ void extract_patches(const std::string &image_path,
 
             for (std::vector<Rectangle>::const_iterator it = exclusions.begin(); it != exclusions.end(); ++it)
             {
-                //teste
                 const Rectangle e = *it;
                 const int x = e.x;
                 const int y = e.y;
