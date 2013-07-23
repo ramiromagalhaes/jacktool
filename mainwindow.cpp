@@ -36,10 +36,16 @@ MainWindow::~MainWindow()
 
 void MainWindow::changeSourceFolder()
 {
-    QString path = QFileDialog::getExistingDirectory(
-                this,
-                tr("Choose source folder"));
-    sourceFolder = QDir(path);
+    QFileDialog dialog(this, tr("Source folder"),
+                       QDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).absolutePath());
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setFileMode(QFileDialog::Directory);
+    dialog.setOption(QFileDialog::ShowDirsOnly);
+    if(!dialog.exec()) {
+        return;
+    }
+    QStringList files = dialog.selectedFiles();
+    sourceFolder = QDir(files[0]);
 
     QStringList filter;
     filter.append("*.jpg");
@@ -48,7 +54,6 @@ void MainWindow::changeSourceFolder()
     filter.append("*.JPG");
     filter.append("*.PNG");
     filter.append("*.BMP");
-
     imagesInSourceFolder = sourceFolder.entryList(filter);
 
     {
