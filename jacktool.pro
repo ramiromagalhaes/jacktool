@@ -38,12 +38,12 @@ unix {
 
 win32 {
     INCLUDEPATH += C:/boost/include/boost-1_54
-    LIBS += -LC:/boost/lib" \
+    LIBS += -LC:/boost/lib \
             -lboost_serialization-mgw46-mt-d-1_54 \
             -lboost_filesystem-mgw46-mt-d-1_54 \
             -lboost_system-mgw46-mt-d-1_54
 
-    INCLUDEPATH += C:/opencv_src/build/include
+    INCLUDEPATH += C:/opencv/install/include
     LIBS += -LC:/opencv/lib \
             -lopencv_core \
             -lopencv_imgproc \
