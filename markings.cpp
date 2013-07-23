@@ -20,7 +20,9 @@ void Markings::changeBaseDirectory(const std::string base_directory_)
     base_directory = base_directory_;
     is_dirty = false;
 
-    for(std::map<std::string, std::vector<Rectangle>*>::iterator it = exclusions.begin(); it != exclusions.end(); ) {
+    std::map<std::string, std::vector<Rectangle>*>::iterator it = exclusions.begin();
+    const std::map<std::string, std::vector<Rectangle>*>::iterator end = exclusions.end();
+    for(; it != end; ++it) {
         std::map<std::string, std::vector<Rectangle> *>::value_type v = *it;
         delete v.second;
     }
