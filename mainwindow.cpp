@@ -117,9 +117,19 @@ void MainWindow::process()
 
 void MainWindow::save()
 {
-    markings.save();
-
-    ui->statusBar->showMessage("Saved.");
+    if (markings.save())
+    {
+        ui->statusBar->showMessage("Saved.");
+    }
+    else
+    {
+        //warn user
+        QMessageBox msgBox;
+        msgBox.setText("Couldn't save file.");
+        msgBox.setInformativeText("Could not save your markings. Do you have permission to write on the images directory?");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+    }
 }
 
 void MainWindow::setPatchSize19x19()

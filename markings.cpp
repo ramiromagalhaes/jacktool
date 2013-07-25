@@ -70,22 +70,23 @@ void Markings::remove(const std::string & image)
     is_dirty = true;
 }
 
-void Markings::save()
+bool Markings::save()
 {
-    boost::filesystem::path archive( base_directory );
-    archive = archive / ".jacktool.data";
+    boost::filesystem::path archivePath( base_directory );
+    archivePath = archivePath / ".jacktool.data";
 
-    if ( !boost::filesystem::exists(archive) )
+    boost::filesystem::ofstream outputStream(archivePath);
+    if (!outputStream.is_open()) //TODO has write permission?
     {
-        create();
+        return false;
     }
 
-    boost::filesystem::ofstream ofs( archive );
-    boost::archive::text_oarchive oa(ofs);
-    oa << *this;
-    ofs.close();
+    boost::archive::text_oarchive outputArchive(outputStream);
+    outputArchive << *this;
+    outputStream.close();
 
     is_dirty = false;
+    return true;
 }
 
 void Markings::processAll(const PatchExtractorConfiguration &cfg)
@@ -126,15 +127,6 @@ bool Markings::load()
     ifs.close();
 
     return true;
-}
-
-void Markings::create()
-{
-    boost::filesystem::path archive( base_directory );
-    archive = archive / ".jacktool.data";
-
-    boost::filesystem::ofstream ofs( archive );
-    ofs.close();
 }
 
 template<class Archive>

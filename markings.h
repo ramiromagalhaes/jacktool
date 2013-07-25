@@ -22,14 +22,13 @@ public:
     void set(const std::string image, std::vector<Rectangle> * markings);
     const std::vector<Rectangle> * get(const std::string & image);
     void remove(const std::string & image);
-    void save();
+    bool save();
     void processAll(const PatchExtractorConfiguration & cfg);
 
     bool isDirty();
 
 private:
     bool load();
-    void create();
 
     friend class boost::serialization::access;
 
