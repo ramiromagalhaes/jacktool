@@ -1,5 +1,5 @@
-#ifndef LABELFILE_H
-#define LABELFILE_H
+#ifndef MARKINGS_H
+#define MARKINGS_H
 
 #include <string>
 #include <vector>
@@ -30,17 +30,18 @@ public:
 private:
     bool load();
 
-    friend class boost::serialization::access;
-
-    bool is_dirty;
-
-    std::string base_directory;
-    std::map<std::string, std::vector<Rectangle>*> exclusions;
-
-    std::vector<Rectangle> * empty;
-
     template<class Archive>
     void serialize(Archive & ar, const unsigned int);
+
+
+    friend class boost::serialization::access;
+
+    const std::vector<Rectangle> * empty;
+
+
+    bool is_dirty;
+    std::string base_directory;
+    std::map<std::string, std::vector<Rectangle>*> exclusions;
 };
 
-#endif // LABELFILE_H
+#endif // MARKINGS_H

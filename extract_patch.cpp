@@ -48,10 +48,17 @@ bool extract_patches(const boost::filesystem::path &image_path,
                 continue;
             }
 
-            //builds the patch filename...
-            boost::filesystem::path filePatchPath = cfg.destinationFolder;
-            filePatchPath /= image_path.filename();
 
+
+            //builds the patch path...
+            boost::filesystem::path filePatchPath = cfg.destinationFolder / image_path.parent_path().filename();
+            //...creates a folder where patches will be saved, if necessary...
+            if ( !boost::filesystem::exists(filePatchPath) )
+            {
+                boost::filesystem::create_directory(filePatchPath);
+            }
+            //..sets the basic patch filename
+            filePatchPath /= image_path.filename();
             std::stringstream ss;
             ss << filePatchPath.native().c_str() << "-" << patch_counter++;
 
