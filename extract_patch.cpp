@@ -5,13 +5,16 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <sstream>
 
-void extract_patches(const std::string &image_path,
-                     const std::string &output_name,
+bool extract_patches(const boost::filesystem::path &image_path,
                      const std::vector<Rectangle> &exclusions,
                      const PatchExtractorConfiguration &cfg)
 {
     cv::Mat image;
-    image = cv::imread(image_path);
+    image = cv::imread(image_path.native());
+    if (!image.data)
+    {
+        return false;
+    }
 
     int patch_counter = 0;
 
@@ -45,14 +48,20 @@ void extract_patches(const std::string &image_path,
                 continue;
             }
 
-            //copia o retalho e grava em arquivo
-            std::stringstream ss;
-            ss << cfg.destinationFolder << output_name << "-" << patch_counter++;
-            std::string filename = ss.str() + ".bmp";
+            //builds the patch filename...
+            boost::filesystem::path filePatchPath = cfg.destinationFolder;
+            filePatchPath /= image_path.filename();
 
+            std::stringstream ss;
+            ss << filePatchPath.native().c_str() << "-" << patch_counter++;
+
+            //...extract the patch...
             cv::Rect roi(w, h, cfg.patchWidth, cfg.patchHeight);
             cv::Mat patch(image, roi);
             cv::cvtColor(patch, patch, CV_BGR2GRAY);
+
+            //...and writes it on file.
+            std::string filename = ss.str() + ".bmp";
             cv::imwrite(filename, patch);
 
             if (cfg.rotate90)
@@ -82,4 +91,5 @@ void extract_patches(const std::string &image_path,
         }
     }
 
+    return true;
 }

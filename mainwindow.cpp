@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    sourceFolder = QDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).absolutePath();
+
     QString destFolder = QDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)).absolutePath();
     destFolder += QDir::separator();
     this->cfg.destinationFolder = destFolder.toAscii().data();
@@ -36,8 +38,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::changeSourceFolder()
 {
-    QFileDialog dialog(this, tr("Source folder"),
-                       QDir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).absolutePath());
+    QFileDialog dialog(this, tr("Source folder"), sourceFolder.absolutePath());
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     dialog.setFileMode(QFileDialog::Directory);
     dialog.setOption(QFileDialog::ShowDirsOnly);
@@ -77,18 +78,21 @@ void MainWindow::changeSourceFolder()
 
 void MainWindow::changeDestinationFolder()
 {
-    QString path = QFileDialog::getExistingDirectory(
-                this,
-                tr("Choose destination folder"),
-                cfg.destinationFolder.c_str());
-    path.append("/");
-
-    cfg.destinationFolder = path.toAscii().constData();
+    QFileDialog dialog(this, tr("Destination folder"),
+                       cfg.destinationFolder.c_str());
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setFileMode(QFileDialog::Directory);
+    dialog.setOption(QFileDialog::ShowDirsOnly);
+    if(!dialog.exec()) {
+        return;
+    }
+    QStringList files = dialog.selectedFiles();
+    cfg.destinationFolder = files[0].toAscii().constData();
 
     {
         QString message;
         message.append("Destination folder now is ");
-        message.append(path);
+        message.append(files[0]);
 
         ui->statusBar->showMessage(message);
     }
@@ -125,8 +129,8 @@ void MainWindow::save()
     {
         //warn user
         QMessageBox msgBox;
-        msgBox.setText("Couldn't save file.");
-        msgBox.setInformativeText("Could not save your markings. Do you have permission to write on the images directory?");
+        msgBox.setText("Couldn't save.");
+        msgBox.setInformativeText("Could not save your markings. Do you have permission to write on the source images directory?");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
     }

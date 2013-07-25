@@ -1,13 +1,13 @@
 #ifndef PATCHEXTRACTORCONFIGURATION_H
 #define PATCHEXTRACTORCONFIGURATION_H
 
-#include <string>
+#include <boost/filesystem.hpp>
 
 class PatchExtractorConfiguration {
 public:
     bool rotate90,rotate180,rotate270;
     int patchHeight, patchWidth;
-    std::string destinationFolder;
+    boost::filesystem::path destinationFolder;
 
     PatchExtractorConfiguration() {
         rotate90 = rotate180 = rotate270 = false;
