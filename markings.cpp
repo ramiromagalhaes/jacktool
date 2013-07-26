@@ -92,12 +92,6 @@ bool Markings::save()
 void Markings::processAll(const PatchExtractorConfiguration &cfg)
 {
     boost::filesystem::path archivePath( base_directory );
-//    archivePath /= archivePath.filename();
-
-//    if ( !boost::filesystem::exists(archivePath) )
-//    {
-//        boost::filesystem::create_directory(archivePath);
-//    }
 
     for(std::map<std::string, std::vector<Rectangle>*>::iterator it = exclusions.begin(); it != exclusions.end(); ++it) {
         const std::map<std::string, std::vector<Rectangle> *>::value_type v = *it;
