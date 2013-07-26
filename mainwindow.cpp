@@ -75,6 +75,7 @@ void MainWindow::changeSourceFolder()
         return;
     }
 
+    currentImageIndex = 0;
     displayCurrentImage();
 }
 
