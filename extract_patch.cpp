@@ -68,19 +68,19 @@ bool extract_patches(const boost::filesystem::path &image_path,
             cv::cvtColor(patch, patch, CV_BGR2GRAY);
 
             //...and writes it on file.
-            std::string filename = ss.str() + ".bmp";
+            std::string filename = ss.str() + ".pgm";
             cv::imwrite(filename, patch);
 
             if (cfg.rotate90)
             {
-                filename = ss.str() + "-90.bmp";
+                filename = ss.str() + "-90.pgm";
                 cv::Mat transp = patch.clone();
                 cv::transpose(patch, transp);
                 cv::imwrite(filename, transp);
             }
             if (cfg.rotate180)
             {
-                filename = ss.str() + "-180.bmp";
+                filename = ss.str() + "-180.pgm";
                 cv::Mat transp = patch.clone();
                 cv::transpose(patch, transp);
                 cv::transpose(transp, transp);
@@ -88,7 +88,7 @@ bool extract_patches(const boost::filesystem::path &image_path,
             }
             if (cfg.rotate270)
             {
-                filename = ss.str() + "-270.bmp";
+                filename = ss.str() + "-270.pgm";
                 cv::Mat transp = patch.clone();
                 cv::transpose(patch, transp);
                 cv::transpose(transp, transp);

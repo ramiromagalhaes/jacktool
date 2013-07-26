@@ -52,9 +52,11 @@ void MainWindow::changeSourceFolder()
     filter.append("*.jpg");
     filter.append("*.png");
     filter.append("*.bmp");
+    filter.append("*.pgm");
     filter.append("*.JPG");
     filter.append("*.PNG");
     filter.append("*.BMP");
+    filter.append("*.PGM");
     imagesInSourceFolder = sourceFolder.entryList(filter);
 
     {
@@ -212,6 +214,7 @@ bool MainWindow::reinforceCurrentImageIndexBoundaries()
     return false;
 }
 
+//TODO FIXME it will only store markings if I move to the previous or next image.
 void MainWindow::storeMarkings()
 {
     if (imagesInSourceFolder.empty())
