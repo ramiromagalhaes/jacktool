@@ -98,7 +98,10 @@ void Markings::processAll(const PatchExtractorConfiguration &cfg)
 
         const boost::filesystem::path file = archivePath / v.first;
 
-        extract_patches(file, *v.second, cfg);
+        if ( !extract_patches(file, *v.second, cfg) )
+        {
+            return;
+        }
     }
 }
 

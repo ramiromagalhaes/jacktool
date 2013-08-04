@@ -4,6 +4,39 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <sstream>
+#include <iostream>
+
+
+
+void writeImage(const std::string & filename, const cv::Mat & image)
+{
+    if ( !cv::imwrite(filename, image) )
+    {
+        std::cerr << "Failed to write patch at path " << filename << std::endl;
+    }
+}
+
+
+
+bool createFolderAsNeeded(boost::filesystem::path &dir)
+{
+    if ( !boost::filesystem::exists(dir) )
+    {
+        try
+        {
+            boost::filesystem::create_directory(dir);
+        }
+        catch (boost::filesystem::filesystem_error &)
+        {
+            std::cerr << "Failed to create a directory " << dir.native() << ". Halting the image processing." << std::endl;
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
 
 bool extract_patches(const boost::filesystem::path &image_path,
                      const std::vector<Rectangle> &exclusions,
@@ -13,6 +46,7 @@ bool extract_patches(const boost::filesystem::path &image_path,
     image = cv::imread(image_path.native());
     if (!image.data)
     {
+        std::cerr << "Could not open " << image_path.native() << std::endl;
         return false;
     }
 
@@ -53,10 +87,11 @@ bool extract_patches(const boost::filesystem::path &image_path,
             //builds the patch path...
             boost::filesystem::path filePatchPath = cfg.destinationFolder / image_path.parent_path().filename();
             //...creates a folder where patches will be saved, if necessary...
-            if ( !boost::filesystem::exists(filePatchPath) )
+            if ( !createFolderAsNeeded(filePatchPath) )
             {
-                boost::filesystem::create_directory(filePatchPath);
+                return false;
             }
+
             //..sets the basic patch filename
             filePatchPath /= image_path.filename();
             std::stringstream ss;
@@ -69,14 +104,14 @@ bool extract_patches(const boost::filesystem::path &image_path,
 
             //...and writes it on file.
             std::string filename = ss.str() + ".pgm";
-            cv::imwrite(filename, patch);
+            writeImage(filename, patch);
 
             if (cfg.rotate90)
             {
                 filename = ss.str() + "-90.pgm";
                 cv::Mat transp = patch.clone();
                 cv::transpose(patch, transp);
-                cv::imwrite(filename, transp);
+                writeImage(filename, transp);
             }
             if (cfg.rotate180)
             {
@@ -84,7 +119,7 @@ bool extract_patches(const boost::filesystem::path &image_path,
                 cv::Mat transp = patch.clone();
                 cv::transpose(patch, transp);
                 cv::transpose(transp, transp);
-                cv::imwrite(filename, transp);
+                writeImage(filename, transp);
             }
             if (cfg.rotate270)
             {
@@ -93,7 +128,7 @@ bool extract_patches(const boost::filesystem::path &image_path,
                 cv::transpose(patch, transp);
                 cv::transpose(transp, transp);
                 cv::transpose(transp, transp);
-                cv::imwrite(filename, transp);
+                writeImage(filename, transp);
             }
         }
     }
