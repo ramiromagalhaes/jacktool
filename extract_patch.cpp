@@ -38,6 +38,43 @@ bool createFolderAsNeeded(boost::filesystem::path &dir)
 
 
 
+bool varianceNormalize(cv::Mat & patch, cv::Mat & normalized)
+{
+    if (normalized.type() != CV_64F || patch.cols != normalized.cols || patch.rows != normalized.rows)
+    {
+        return false;
+    }
+
+    cv::Mat integralImage(patch.cols + 1, patch.rows + 1, CV_32S);
+    cv::Mat squareIntegralImage(patch.cols + 1, patch.rows + 1, CV_32S);
+    cv::integral(patch, integralImage, squareIntegralImage, CV_32S);
+
+
+    const double area = patch.rows * patch.cols;
+    const double subwindowMean = (integralImage.at<int>(0, 0)
+                                    - integralImage.at<int>(0, patch.cols)
+                                    - integralImage.at<int>(patch.rows, 0)
+                                    + integralImage.at<int>(patch.rows, patch.cols)) / area;
+    const double subwindowStdDeviation = sqrt(
+        subwindowMean * subwindowMean - (squareIntegralImage.at<int>(0, 0)
+                                            - squareIntegralImage.at<int>(0, patch.cols)
+                                            - squareIntegralImage.at<int>(patch.rows, 0)
+                                            + squareIntegralImage.at<int>(patch.rows, patch.cols)
+                                         ) / area);
+
+    for(int j = 0; j < patch.rows; j++)
+    {
+        for (int i = 0; i < patch.cols; i++)
+        {
+            normalized.at<double>(i, j) = (patch.at<unsigned char>(i, j) - subwindowMean) / subwindowStdDeviation;
+        }
+    }
+
+    return true;
+}
+
+
+
 bool extract_patches(const boost::filesystem::path &image_path,
                      const std::vector<Rectangle> &exclusions,
                      const PatchExtractorConfiguration &cfg)
@@ -86,6 +123,7 @@ bool extract_patches(const boost::filesystem::path &image_path,
 
             //builds the patch path...
             boost::filesystem::path filePatchPath = cfg.destinationFolder / image_path.parent_path().filename();
+
             //...creates a folder where patches will be saved, if necessary...
             if ( !createFolderAsNeeded(filePatchPath) )
             {
@@ -101,6 +139,9 @@ bool extract_patches(const boost::filesystem::path &image_path,
             cv::Rect roi(w, h, cfg.patchWidth, cfg.patchHeight);
             cv::Mat patch(image, roi);
             cv::cvtColor(patch, patch, CV_BGR2GRAY);
+
+            //TODO how will I deal with the variance normalization of the patches?
+            //See (Viola and Jones, 2004, section 5.4). See also varianceNormalize method in this file
 
             //...and writes it on file.
             std::string filename = ss.str() + ".pgm";
