@@ -47,9 +47,9 @@ void Markings::set(const std::string image, std::vector<Rectangle> *markings)
     is_dirty = true;
 }
 
-const std::vector<Rectangle> * Markings::get(const std::string &image)
+const std::vector<Rectangle> * Markings::get(const std::string &image) const
 {
-    std::map<std::string, std::vector<Rectangle> *>::iterator it = exclusions.find(image);
+    std::map<std::string, std::vector<Rectangle> *>::const_iterator it = exclusions.find(image);
     if ( it != exclusions.end() )
     {
         const std::map<std::string, std::vector<Rectangle> *>::value_type v = *it;
@@ -89,11 +89,11 @@ bool Markings::save()
     return true;
 }
 
-void Markings::processAll(const PatchExtractorConfiguration &cfg)
+void Markings::processAll(const PatchExtractorConfiguration &cfg) const
 {
     boost::filesystem::path archivePath( base_directory );
 
-    for(std::map<std::string, std::vector<Rectangle>*>::iterator it = exclusions.begin(); it != exclusions.end(); ++it) {
+    for(std::map<std::string, std::vector<Rectangle>*>::const_iterator it = exclusions.begin(); it != exclusions.end(); ++it) {
         const std::map<std::string, std::vector<Rectangle> *>::value_type v = *it;
 
         const boost::filesystem::path file = archivePath / v.first;

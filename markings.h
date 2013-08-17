@@ -20,10 +20,10 @@ public:
     Markings(const std::string base_directory_);
     void changeBaseDirectory(const std::string base_directory_);
     void set(const std::string image, std::vector<Rectangle> * markings);
-    const std::vector<Rectangle> * get(const std::string & image);
+    const std::vector<Rectangle> * get(const std::string & image) const;
     void remove(const std::string & image);
     bool save();
-    void processAll(const PatchExtractorConfiguration & cfg);
+    void processAll(const PatchExtractorConfiguration & cfg) const;
 
     bool isDirty();
 
