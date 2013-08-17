@@ -14,16 +14,16 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    extract_patch.cpp \
-    imagemarker.cpp \
-    markings.cpp
+        imagemarker.cpp \
+        ../jacktool-common/markings.cpp \
+        ../jacktool-common/extract_patch.cpp
 
 HEADERS  += mainwindow.h \
-    PatchExtractorConfiguration.h \
-    extract_patch.h \
-    Rectangle.h \
-    imagemarker.h \
-    markings.h
+        imagemarker.h \
+        ../jacktool-common/markings.h \
+        ../jacktool-common/PatchExtractorConfiguration.h \
+        ../jacktool-common/extract_patch.h \
+        ../jacktool-common/Rectangle.h
 
 FORMS    += mainwindow.ui
 
