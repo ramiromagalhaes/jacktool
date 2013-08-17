@@ -11,8 +11,13 @@ public:
 
     PatchExtractorConfiguration() {
         rotate90 = rotate180 = rotate270 = false;
-        patchHeight = patchWidth = 20; //Viola, Jones; 2004 defaults.
-                                       //Pavani et al; 2010 = 20 x 20
+        patchHeight = patchWidth = 20; //Pavani et al; 2010 defaults
+                                       //Viola, Jones; 2004 is 24x24
+    }
+
+    PatchExtractorConfiguration(boost::filesystem::path & destinationFolder_) {
+        PatchExtractorConfiguration();
+        destinationFolder = destinationFolder_;
     }
 };
 
