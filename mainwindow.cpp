@@ -13,9 +13,6 @@
 #include <QDesktopServices>
 #include <QMessageBox>
 
-#include "PatchExtractorConfiguration.h"
-#include "extract_patch.h"
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -24,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QString destFolder = QDir(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation)).absolutePath();
     destFolder += QDir::separator();
-    this->cfg.destinationFolder = destFolder.toAscii().data();
 
     currentImageIndex = -1;
 
@@ -69,7 +65,7 @@ void MainWindow::changeSourceFolder()
         ui->statusBar->showMessage(message);
     }
 
-    markings.changeBaseDirectory(sourceFolder.absolutePath().toAscii().constData());
+    markings.setBaseDirectory(sourceFolder.absolutePath().toAscii().constData());
 
     if ( reinforceCurrentImageIndexBoundaries() ) {
         return;
@@ -77,49 +73,6 @@ void MainWindow::changeSourceFolder()
 
     currentImageIndex = 0;
     displayCurrentImage();
-}
-
-void MainWindow::changeDestinationFolder()
-{
-    QFileDialog dialog(this, tr("Destination folder"),
-                       cfg.destinationFolder.c_str());
-    dialog.setAcceptMode(QFileDialog::AcceptOpen);
-    dialog.setFileMode(QFileDialog::Directory);
-    dialog.setOption(QFileDialog::ShowDirsOnly);
-    if(!dialog.exec()) {
-        return;
-    }
-    QStringList files = dialog.selectedFiles();
-    cfg.destinationFolder = files[0].toAscii().constData();
-
-    {
-        QString message;
-        message.append("Destination folder now is ");
-        message.append(files[0]);
-
-        ui->statusBar->showMessage(message);
-    }
-}
-
-void MainWindow::toggleTurn90()
-{
-    cfg.rotate90 = !cfg.rotate90;
-}
-
-void MainWindow::toggleTurn180()
-{
-    cfg.rotate180 = !cfg.rotate180;
-}
-
-void MainWindow::toggleTurn270()
-{
-    cfg.rotate270 = !cfg.rotate270;
-}
-
-void MainWindow::process()
-{
-    //TODO display a wait screen
-    markings.processAll(cfg);
 }
 
 void MainWindow::save()
@@ -137,30 +90,6 @@ void MainWindow::save()
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
     }
-}
-
-void MainWindow::setPatchSize19x19()
-{
-    cfg.patchHeight = cfg.patchWidth = 19;
-
-    this->ui->action20x20->setChecked(false);
-    this->ui->action24x24->setChecked(false);
-}
-
-void MainWindow::setPatchSize20x20()
-{
-    cfg.patchHeight = cfg.patchWidth = 20;
-
-    this->ui->action19x19->setChecked(false);
-    this->ui->action24x24->setChecked(false);
-}
-
-void MainWindow::setPatchSize24x24()
-{
-    cfg.patchHeight = cfg.patchWidth = 24;
-
-    this->ui->action19x19->setChecked(false);
-    this->ui->action20x20->setChecked(false);
 }
 
 void MainWindow::previousImage()

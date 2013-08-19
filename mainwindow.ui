@@ -71,28 +71,8 @@
     <property name="title">
      <string>&amp;Arquivo</string>
     </property>
-    <addaction name="actionSave"/>
     <addaction name="actionSourceFolder"/>
-    <addaction name="actionDestinationFolder"/>
-    <addaction name="actionProcess"/>
-   </widget>
-   <widget class="QMenu" name="menuPatches">
-    <property name="title">
-     <string>&amp;Retalhos</string>
-    </property>
-    <widget class="QMenu" name="menuTamanho_dos_recortes">
-     <property name="title">
-      <string>&amp;Tamanho</string>
-     </property>
-     <addaction name="action19x19"/>
-     <addaction name="action20x20"/>
-     <addaction name="action24x24"/>
-    </widget>
-    <addaction name="actionTurn90"/>
-    <addaction name="actionTurn180"/>
-    <addaction name="actionTurn270"/>
-    <addaction name="separator"/>
-    <addaction name="menuTamanho_dos_recortes"/>
+    <addaction name="actionSave"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -102,7 +82,6 @@
     <addaction name="actionNext"/>
    </widget>
    <addaction name="menuMain"/>
-   <addaction name="menuPatches"/>
    <addaction name="menuTools"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -224,7 +203,7 @@
     <string>&amp;Próxima imagem</string>
    </property>
    <property name="shortcut">
-    <string>F5</string>
+    <string>Right</string>
    </property>
   </action>
   <action name="actionSave">
@@ -240,7 +219,7 @@
     <string>Imagem &amp;anterior</string>
    </property>
    <property name="shortcut">
-    <string>F4</string>
+    <string>Left</string>
    </property>
   </action>
  </widget>
@@ -255,138 +234,10 @@
  <resources/>
  <connections>
   <connection>
-   <sender>actionDestinationFolder</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>changeDestinationFolder()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>actionSourceFolder</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>changeSourceFolder()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionTurn90</sender>
-   <signal>changed()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>toggleTurn90()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionTurn180</sender>
-   <signal>changed()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>toggleTurn180()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionTurn270</sender>
-   <signal>changed()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>toggleTurn270()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionProcess</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>process()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>action19x19</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>setPatchSize19x19()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>action20x20</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>setPatchSize20x20()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>action24x24</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>setPatchSize24x24()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -449,17 +300,8 @@
  </connections>
  <slots>
   <slot>changeSourceFolder()</slot>
-  <slot>changeDestinationFolder()</slot>
-  <slot>toggleTurn90()</slot>
-  <slot>toggleTurn180()</slot>
-  <slot>toggleTurn270()</slot>
-  <slot>process()</slot>
-  <slot>changePatchSize()</slot>
   <slot>setMarkerTool()</slot>
   <slot>setEraserTool()</slot>
-  <slot>setPatchSize19x19()</slot>
-  <slot>setPatchSize20x20()</slot>
-  <slot>setPatchSize24x24()</slot>
   <slot>nextImage()</slot>
   <slot>previousImage()</slot>
   <slot>save()</slot>

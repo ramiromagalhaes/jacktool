@@ -1,7 +1,7 @@
 #ifndef IMAGEMARKER_H
 #define IMAGEMARKER_H
 
-#include "Rectangle.h"
+#include "../jacktool-common/Rectangle.h"
 #include <vector>
 #include <QLabel>
 #include <QPen>
