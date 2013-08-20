@@ -89,6 +89,7 @@ void MainWindow::save()
         msgBox.setInformativeText("Could not save your markings. Do you have permission to write on the source images directory?");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.exec();
     }
 }
 
