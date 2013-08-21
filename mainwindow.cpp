@@ -55,6 +55,11 @@ void MainWindow::changeSourceFolder()
     filter.append("*.PGM");
     imagesInSourceFolder = sourceFolder.entryList(filter);
 
+    markingsSaveLocation.clear();
+    markings.reset();
+    markings.setBaseDirectory( sourceFolder.absolutePath().toAscii().constData() );
+    markings.loadFilenamesFromBaseDirectory();
+
     {
         QString message;
         message.append("Found ");
@@ -64,8 +69,6 @@ void MainWindow::changeSourceFolder()
 
         ui->statusBar->showMessage(message);
     }
-
-    markings.setBaseDirectory(sourceFolder.absolutePath().toAscii().constData());
 
     if ( reinforceCurrentImageIndexBoundaries() ) {
         return;
@@ -77,7 +80,19 @@ void MainWindow::changeSourceFolder()
 
 void MainWindow::save()
 {
-    if (markings.save())
+    if (markingsSaveLocation.isEmpty())
+    {
+        QFileDialog dialog(this, tr("Save markings"), sourceFolder.absolutePath());
+        dialog.setAcceptMode(QFileDialog::AcceptSave);
+        dialog.setFileMode(QFileDialog::AnyFile);
+        if(!dialog.exec()) {
+            return;
+        }
+        QStringList files = dialog.selectedFiles();
+        markingsSaveLocation = files[0];
+    }
+
+    if ( markings.save(markingsSaveLocation.toAscii().constData()) )
     {
         ui->statusBar->showMessage("Saved.");
     }
@@ -86,11 +101,67 @@ void MainWindow::save()
         //warn user
         QMessageBox msgBox;
         msgBox.setText("Couldn't save.");
-        msgBox.setInformativeText("Could not save your markings. Do you have permission to write on the source images directory?");
+        msgBox.setInformativeText("Could not save your markings. Do you have permission to write on the source images directory? Is there enought free memory there?");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.exec();
     }
+}
+
+void MainWindow::load()
+{
+    QFileDialog dialog(this, tr("Load a jacktool data file"), sourceFolder.absolutePath());
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setFileMode(QFileDialog::AnyFile);
+    if(!dialog.exec()) {
+        return;
+    }
+    QStringList files = dialog.selectedFiles();
+    markingsSaveLocation = files[0];
+
+    markings.reset();
+    markings.loadFilenamesFromBaseDirectory();
+    if ( !markings.load(markingsSaveLocation.toAscii().constData()) )
+    {
+        //warn user
+        QMessageBox msgBox;
+        msgBox.setText("Couldn't load file.");
+        msgBox.setInformativeText("Could not load markings data.");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.exec();
+        return;
+    }
+
+    sourceFolder = QDir(markings.getBaseDirectory().c_str());
+    QStringList filter;
+    filter.append("*.jpg");
+    filter.append("*.png");
+    filter.append("*.bmp");
+    filter.append("*.pgm");
+    filter.append("*.JPG");
+    filter.append("*.PNG");
+    filter.append("*.BMP");
+    filter.append("*.PGM");
+    imagesInSourceFolder = sourceFolder.entryList(filter);
+
+    {
+        QString message;
+        message.append("Found ");
+        message.append(QString::number(imagesInSourceFolder.size()));
+        message.append(" images in folder ");
+        message.append(sourceFolder.absolutePath());
+
+        ui->statusBar->showMessage(message);
+    }
+
+    if ( reinforceCurrentImageIndexBoundaries() ) {
+        return;
+    }
+
+    currentImageIndex = 0;
+    displayCurrentImage();
+
 }
 
 void MainWindow::previousImage()
@@ -110,6 +181,30 @@ void MainWindow::nextImage()
     storeMarkings();
 
     currentImageIndex++;
+    if (reinforceCurrentImageIndexBoundaries()) {
+        return;
+    }
+
+    displayCurrentImage();
+}
+
+void MainWindow::firstImage()
+{
+    storeMarkings();
+
+    currentImageIndex = 0;
+    if (reinforceCurrentImageIndexBoundaries()) {
+        return;
+    }
+
+    displayCurrentImage();
+}
+
+void MainWindow::lastImage()
+{
+    storeMarkings();
+
+    currentImageIndex = imagesInSourceFolder.size() - 1;
     if (reinforceCurrentImageIndexBoundaries()) {
         return;
     }

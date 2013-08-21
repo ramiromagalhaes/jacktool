@@ -26,8 +26,11 @@ public:
 public slots:
     void changeSourceFolder();
     void save();
+    void load();
     void previousImage();
     void nextImage();
+    void firstImage();
+    void lastImage();
 
 protected:
     virtual void resizeEvent(QResizeEvent *event);
@@ -44,6 +47,7 @@ private:
     int currentImageIndex; //the current image in imagesInSourceFolder being worked on
 
     Markings markings;
+    QString markingsSaveLocation; //if != empty holds where we are saving our file
 };
 
 #endif // MAINWINDOW_H

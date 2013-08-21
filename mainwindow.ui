@@ -72,6 +72,7 @@
      <string>&amp;Arquivo</string>
     </property>
     <addaction name="actionSourceFolder"/>
+    <addaction name="actionLoad"/>
     <addaction name="actionSave"/>
    </widget>
    <widget class="QMenu" name="menuTools">
@@ -80,6 +81,8 @@
     </property>
     <addaction name="actionPrevious"/>
     <addaction name="actionNext"/>
+    <addaction name="actionFirst"/>
+    <addaction name="actionLast"/>
    </widget>
    <addaction name="menuMain"/>
    <addaction name="menuTools"/>
@@ -222,6 +225,30 @@
     <string>Left</string>
    </property>
   </action>
+  <action name="actionLoad">
+   <property name="text">
+    <string>Carregar marcações</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="actionFirst">
+   <property name="text">
+    <string>Primeira imagem</string>
+   </property>
+   <property name="shortcut">
+    <string>Home</string>
+   </property>
+  </action>
+  <action name="actionLast">
+   <property name="text">
+    <string>Última imagem</string>
+   </property>
+   <property name="shortcut">
+    <string>End</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -297,6 +324,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionLoad</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>load()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFirst</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>firstImage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLast</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>lastImage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>changeSourceFolder()</slot>
@@ -305,5 +380,8 @@
   <slot>nextImage()</slot>
   <slot>previousImage()</slot>
   <slot>save()</slot>
+  <slot>load()</slot>
+  <slot>firstImage()</slot>
+  <slot>lastImage()</slot>
  </slots>
 </ui>
