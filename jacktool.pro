@@ -42,7 +42,7 @@ win32 {
 
     INCLUDEPATH += C:/opencv/install/include
     LIBS += -LC:/opencv/lib \
-            -lopencv_core \
-            -lopencv_imgproc \
-            -lopencv_highgui
+            -lopencv_core246 \
+            -lopencv_imgproc246 \
+            -lopencv_highgui246
 }
